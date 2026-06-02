@@ -14,10 +14,10 @@ PARTS = [
     ("build_ch01.py", "parts/ch01.docx"),
     ("build_ch02.py", "parts/ch02.docx"),
 ]
-# auto-include any further chapters that have been built (ch03.docx, ...)
-EXTRA = ["build_ch03.py", "build_ch04.py", "build_ch05.py", "build_ch06.py",
-         "build_ch07.py", "build_appendix.py", "build_references.py"]
-for s in EXTRA:
+# completed chapters merged into the delivered book (work-in-progress chapters
+# are intentionally excluded until finished, to avoid half-translated chapters)
+COMPLETE = ["build_ch03.py"]
+for s in COMPLETE:
     if os.path.exists(s):
         out = "parts/" + s.replace("build_", "").replace(".py", ".docx")
         PARTS.append((s, out))
