@@ -1,3 +1,7 @@
 parts/
 __pycache__/
 *.pyc
+ch3_figs/
+ch3_eqs/
+ch?_figs/
+ch?_eqs/
