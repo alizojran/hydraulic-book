@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """第 4 章 基于物理的建模 —— 内容构建（WIP，逐节扩充）。
 Produces parts/ch04.docx (content-only)."""
-import os, re, fitz, hashlib
+import os, re, fitz, hashlib, numpy as np
 from hsbook_docx import DocBuilder, extract_equations, SRC_PDF, pidx
 
 CH = 4
@@ -15,17 +15,36 @@ for pp in PAGES:
 
 # ---- equations whose labels OCR'd oddly (comma etc.) and were missed -> manual band crop
 doc = fitz.open(SRC_PDF)
-MANUAL_EQ = {  # label: (page, y0, y1)
-    "4.26": (65, 316, 338),
+MANUAL_EQ = {  # label: (page, label_y_centre) -> ink-based vertical expansion
+    "4.26": (65, 327), "4.228": (105, 418), "4.232": (106, 257), "4.234": (106, 552),
 }
-def _man_eq(label, page_no, y0, y1, dpi=200):
+def _man_eq(label, page_no, ycentre, dpi=200, gap_mm=2.4, max_mm=72, pad=7):
     page = doc[pidx(page_no)]; words = page.get_text("words")
     left = min(w[0] for w in words); right = max(w[2] for w in words)
-    box = fitz.Rect(left-7, y0, right+7, y1)
+    pm = page.get_pixmap(dpi=dpi, colorspace=fitz.csGRAY)
+    arr = np.frombuffer(pm.samples, dtype=np.uint8).reshape(pm.height, pm.width)
+    sc = dpi / 72.0
+    col = arr[:, int(left*sc):int(right*sc)]
+    ink = (col < 128).sum(axis=1); thr = 3
+    cy = int(ycentre*sc); H = arr.shape[0]
+    maxpx = int(max_mm/25.4*dpi); gap = int(gap_mm/25.4*dpi)
+    top = cy; bl = 0
+    for r in range(cy, max(0, cy-maxpx), -1):
+        if ink[r] > thr: top = r; bl = 0
+        else:
+            bl += 1
+            if bl >= gap: break
+    bot = cy; bl = 0
+    for r in range(cy, min(H, cy+maxpx)):
+        if ink[r] > thr: bot = r; bl = 0
+        else:
+            bl += 1
+            if bl >= gap: break
+    box = fitz.Rect(left-pad, top/sc - 2, right+pad, bot/sc + 2)
     path = f"ch4_eqs/eq_{label}.png"; page.get_pixmap(dpi=dpi, clip=box).save(path)
     EQ[label] = (path, box.width/72*2.54)
-for lab, (pg, y0, y1) in MANUAL_EQ.items():
-    _man_eq(lab, pg, y0, y1)
+for lab, (pg, yc) in MANUAL_EQ.items():
+    _man_eq(lab, pg, yc)
 
 # ---- figures ----
 os.makedirs("ch4_figs", exist_ok=True)
@@ -33,11 +52,13 @@ FIGPAGE = {"4.1": 54, "4.2": 54, "4.3": 56, "4.4": 57,
            "4.5": 59, "4.6": 62, "4.7": 63, "4.8": 63, "4.9": 68,
            "4.10": 71, "4.11": 72, "4.12": 75, "4.13": 76, "4.14": 78,
            "4.15": 81, "4.16": 82, "4.17": 86, "4.18": 87, "4.19": 90,
-           "4.20": 91, "4.21": 92}
+           "4.20": 91, "4.21": 92, "4.22": 99, "4.23": 100, "4.24": 101,
+           "4.25": 101, "4.26": 109, "4.27": 111}
 MANUAL  = {"4.3": (56, 92, 444, 408, 533), "4.5": (59, 95, 348, 372, 469),
            "4.6": (62, 78, 150, 375, 568), "4.7": (63, 70, 58, 365, 378),
            "4.8": (63, 65, 415, 405, 540), "4.9": (68, 88, 238, 365, 332),
-           "4.18": (87, 90, 162, 368, 345), "4.19": (90, 70, 428, 405, 495)}
+           "4.18": (87, 90, 162, 368, 345), "4.19": (90, 70, 428, 405, 495),
+           "4.22": (99, 65, 168, 410, 283), "4.24": (101, 105, 148, 365, 330)}
 TOPCUT  = {"4.1": 62, "4.16": 58, "4.21": 62}         # force figure top (trim header)
 def _figbox(page, fig):
     words = page.get_text("words")
@@ -85,6 +106,12 @@ FIGCAP = {
  "4.19": ("管道的分段", "Segmentation of pipelines", 11.5),
  "4.20": ("Viersma 的单管段仿真模型", "Viersma's simulation model for one pipeline segment", 13),
  "4.21": ("Pawlik 的离散管道模型", "Pawlik's discrete pipeline model", 12.5),
+ "4.22": ("液压伺服系统的简化结构化模型（FL 为负载力，见 4.4.3、4.4.4 节）", "Simplified and structured model of hydraulic servo-systems (FL is the load force) (Bernzen, 1999)", 13),
+ "4.23": ("阀芯位置阶跃响应（点线：u；实线：x_v*）", "Valve spool position step response (dotted: u; solid: x_v*)", 10.5),
+ "4.24": ("腔 B 内的压力（缸被锁定）", "Pressure in chamber B (blocked cylinder)", 10),
+ "4.25": ("腔 A 内的压力（缸被锁定）", "Pressure in chamber A (blocked cylinder)", 10),
+ "4.26": ("简化线性化模型的两个等价框图", "Two equivalent block diagrams of the simplified and linearised model", 12.5),
+ "4.27": ("简化的液压伺服系统模型", "Simplified hydraulic servo-system model", 13),
 }
 
 # ---- build ----
@@ -815,8 +842,248 @@ b.para("有了式 4.176–4.178 的模型，便有了一个有用的、保留物
        "本质低频行为）通常已足够。就伺服阀与执行器之间的管道而言，这意味着：")
 eq("4.179")
 
-# ---- (more sections appended in subsequent passes: 4.3 ...) ----
+b.h2("4.3　典型的非线性状态空间模型", "Typical Non-linear State-space Models")
+b.para("若把状态变量和输入变量定义为")
+eq("4.180")
+b.para("则由（两级）伺服阀和（差动）缸组成的液压伺服系统的完全非线性模型可写为", indent=False)
+eq("4.181")
+b.para("总质量由下式给出：")
+eq("4.182")
+b.para("摩擦力由下式给出：")
+eq("4.183")
+b.para("有效体积模量表示为：")
+eq("4.184", "4.185")
+b.para("缸腔容积由下式给出：")
+eq("4.186", "4.187")
+b.para("流量方程的特征为：")
+eq("4.188", "4.189")
+b.para("（内）泄漏流可按下式计算：")
+eq("4.190")
+b.para("注意，推导该非线性模型时作了若干在实践中通常满足的标准假设：")
+b.bullet("液压泵提供恒定供油压力，与油流无关。")
+b.bullet("油箱中压力恒定。")
+b.bullet("所建模的是对称临界中位四通阀。")
+b.bullet("通过阀的流动为湍流。")
+b.bullet("泄漏流为层流。")
+b.bullet("例如阀与执行器之间管道的无效容积可建模为附加的无效行程。")
+b.bullet("库仑摩擦、静摩擦和黏性摩擦作用于执行器。")
+b.bullet("执行器的周围环境和负载是刚性的。")
+b.bullet("假设阀与执行器之间管道中压力可能的动态行为可忽略（即阀直接安装在执行器上）。然而，"
+         "如下文所述，若这些动态显得重要，可简单地加入。")
+b.para("现在以 Yang-Tobler 模态表示的形式计入阀与执行器腔之间的管道动态，并与阀流量方程"
+       "和执行器模型相集成。运动方程、缸腔内的压力动态和阀动态仍由式 4.181 描述。阀流量"
+       "取自式 4.38 和 4.39：")
+eq("4.191", "4.192")
+b.para("管道模型以式 4.177 的形式给出：")
+eq("4.193")
+b.para("其中", indent=False)
+eq("4.194")
+b.para("相应的矩阵 AplA、AplB、BplA、BplB、CplA、CplB 和状态向量 xplA、xplB 同式 4.178。扩展"
+       "状态向量定义为：", indent=False)
+eq("4.195")
+
+b.h2("4.4　阀控系统的结构化与简化模型", "Structured and Simplified Models of Valve-controlled Systems")
+b.para("在迄今给出的理论模型中，包含了液压伺服系统中可能相关的大多数动态与非线性效应。"
+       "借助该模型的仿真，可考察忽略或简化某些效应的可容许性。此外，在实践中满足的某些"
+       "假设下、对某些工作点，可导出液压伺服系统的简化与线性化模型。结果将得到一个相当"
+       "简单的模型，它描述液压伺服系统的相关动态行为，同时在很大程度上保留模型的物理结构。")
+b.h3("4.4.1　阀与管道动态的相关性", "Relevance of Valve and Pipeline Dynamics")
+b.para("对低频行为（这是大多数应用所关注的频率范围），管道效应在输入-输出行为中不起作用。"
+       "然而，在液压伺服系统的高频行为中，阀与执行器腔之间的管道引入阻尼很差的谐振效应"
+       "（即压力峰值与振荡）。本质上，管道动态在复平面上含右半平面（RHP）零点，使系统成为"
+       "非最小相位系统。这不仅可能导致响应差，还可能在使用高增益控制器时导致不稳定。")
+b.para("附录 B.2 给出了制造商提供的伺服阀阶跃响应与频率响应示例（Bosch Rexroth, 2000）。在"
+       "大多数闭环系统带宽不太高的情形下，施加于滑阀的控制输入与阀芯位置直接成正比，即阀的"
+       "动态足够快、可以忽略——至少在控制器设计中如此。然而，伺服阀动态对暂态压力有显著的"
+       "滤波效应。由此产生的压力波纹已由 Watton（1987）和 Sohl 与 Bobrow（1999）测量，并表明"
+       "在较低温度下因引入显著的管路电阻而更为显著。因此，在测试控制器的仿真模型中，应始终"
+       "包含阀动态。")
+b.para("若现在把伺服阀建模为增益为 Kv 的比例系统，则系统阶数降为 n = 4。若忽略摩擦力（或只"
+       "计入黏性摩擦），模型可拆分为一个 n = 2 阶、以 pA = x3 和 pB = x4 为状态的非线性“液压"
+       "部分”模型，以及一个同阶的线性“机械部分”模型；见图 4.22。否则，可把非线性摩擦力项"
+       "视为以速度 x2 为扰动变量的扰动项。")
+fig("4.22")
+b.para("对正控制输入信号 u ≥ 0，“液压部分”模型取如下形式：")
+eq("4.196")
+b.para("对负控制输入信号 u < 0：", indent=False)
+eq("4.197")
+b.para("假设两个缸腔的体积模量恒定并忽略泄漏流，对正输入 u > 0 得到简单模型：")
+eq("4.198")
+b.para("对负输入 u < 0：", indent=False)
+eq("4.199")
+b.h3("4.4.2　压力动态的近似", "Approximation of Pressure Dynamics")
+b.para("现在导出用于估计液压容积中压力动态时间常数的关系式。这有助于判断是否可忽略管道与"
+       "阀动态。")
+b.label("4.4.2.1　实验阶跃响应（Experimental Step Responses）")
+b.para("图 4.23–4.25 分别给出阀位置阶跃响应以及缸腔 A、B 中相应的压力。这些实验结果取自对 "
+       "7.2.1 节小型差动缸（被锁定，即 xp = 0）所做的实验。")
+b.para("从这些图可清楚看出，压力的上升时间很小。下一节将导出简单容积 V（即缸腔）中压力动态"
+       "时间常数的粗略估计公式。")
+fig("4.23"); fig("4.24"); fig("4.25")
+b.label("4.4.2.2　时间常数的估计（Estimation of Time Constant）")
+b.para("容积为 V 的缸腔中压力动态的微分方程由下式给出：")
+eq("4.200")
+b.para("其中 E′ 为油液体积模量，cv* 为阀系数，−1 < xv* < 1 为归一化阀位置。以归一化压力", indent=False)
+eq("4.201")
+b.para("式 4.200 可表示为", indent=False)
+eq("4.202")
+b.para("或写成线性化形式", indent=False)
+eq("4.203")
+b.para("令 xv* = 0，把上式写成", indent=False)
+eq("4.204")
+b.para("其中时间常数由下式确定：", indent=False)
+eq("4.205")
+b.para("因此 Tp 与容积 V（从而与缸的尺寸）直接成正比。这意味着小缸的时间常数低、大缸的时间"
+       "常数高。Tp 的值可作为是否需要考虑管道或压力动态的判据。", indent=False)
+b.h3("4.4.3　负载压力的引入", "Introduction of Load Pressure")
+b.para("本节须区分采用同步缸的液压伺服系统与采用差动缸的液压伺服系统（见图 4.1）。")
+b.label("4.4.3.1　对称执行器（Symmetric Actuator）")
+b.para("对对称阀与对称缸的组合（各腔的压力作用面积相等），通常引入跨负载的压降，或简称负载"
+       "压力")
+eq("4.206")
+b.para("它对应于通过负载的流量，或简称负载流量", indent=False)
+eq("4.207")
+b.para("因此，可把负载流量表示为阀位置和负载压力的函数，即：")
+eq("4.208")
+b.para("利用连续性方程", indent=False)
+eq("4.209")
+b.para("以及关系式（前提是泄漏流可忽略）", indent=False)
+eq("4.210")
+b.para("得到", indent=False)
+eq("4.211")
+b.para("以及", indent=False)
+eq("4.212")
+b.para("于是得到如下压力动态方程：")
+eq("4.213")
+b.para("其中假设了", indent=False)
+eq("4.214")
+b.label("4.4.3.2　非对称执行器（Asymmetric Actuator）")
+b.para("然而，对对称阀与非对称缸的组合，不能引入这样的负载流量，因为由连续性方程，进口流量"
+       "与出口流量总是不同，即：")
+eq("4.215")
+b.para("（即便内泄漏流可忽略）。这时，与其用式 4.206 的负载压力，不如更方便地定义负载压力", indent=False)
+eq("4.216")
+b.para("它可看作平衡摩擦力和负载力所需的“虚拟”压力（Feigel, 1987a）", indent=False)
+eq("4.217")
+b.para("把式 4.2、4.3、4.215 和 4.216 组合，得到如下关系：")
+eq("4.218")
+b.para("对 xp > 0，以及", indent=False)
+eq("4.219")
+b.para("对 xp < 0，其中 Rh 是所谓的液压（湍流）电阻", indent=False)
+eq("4.220")
+b.para("由这些方程可清楚看出：当 ps > pT、a < 1、pL > 0 时，活塞外伸（即 xp > 0）时两腔容积内"
+       "的压力总是小于活塞内缩（即 xp < 0）时的压力，即 pA,out < pA,in 且 pB,out < pB,in。", indent=False)
+b.para("此外，对相等的阀芯位置，即 Rh,out = Rh,in（对称阀），有速度比")
+eq("4.221")
+b.para("对所有 a·ps − pT + pL ≥ 0 和 ps − a·pT − pL ≥ 0，该函数连续上升，故无极值。在空载"
+       "（pL = 0）情形下，活塞外伸速度通常高于内缩速度。", indent=False)
+b.h3("4.4.4　线性化模型", "Linearised Models")
+b.para("在应用（线性）辨识或控制设计技术之前，常需对描述阀压力-流量特性的代数非线性方程"
+       "作线性化。")
+b.label("4.4.4.1　阀灵敏度系数（Valve Sensitivity Coefficients）")
+b.para("把式 4.2 和 4.3 在某特定工作点 P0 = (xv0, pA0, pB0) 处展开为泰勒级数（Δ 算子表示相对于"
+       "线性化所围绕工作点的偏差，为简便常省略），得到")
+eq("4.222", "4.223")
+b.para("其中流量增益（flow gains）定义为", indent=False)
+eq("4.224", "4.225")
+b.para("流量-压力系数（flow-pressure coefficients）表示为", indent=False)
+eq("4.226", "4.227", "4.228")
+b.para("其他有用的量是压力灵敏度（pressure sensitivities），定义为", indent=False)
+eq("4.229", "4.230")
+b.para("它们通过微积分中著名的关系与其他量相联系", indent=False)
+eq("4.231")
+b.para("系数 KQx、KQp 和 Kpx 称为阀灵敏度系数，在确定稳定性、频率响应和其他动态特性方面"
+       "极为重要（Merritt, 1967）：流量增益直接影响系统中的开环增益常数，因而直接影响系统"
+       "稳定性；流量-压力系数直接影响阀-缸组合的阻尼比；阀的压力灵敏度相当大，这说明了阀-缸"
+       "组合能以很小的误差克服大摩擦负载的能力。")
+b.para("对称执行器。　对式 4.212 采用同样的步骤，得到流量增益")
+eq("4.232")
+b.para("以及流量-压力系数", indent=False)
+eq("4.233")
+b.label("4.4.4.2　线性状态空间模型（Linear State-space Model）")
+b.para("对非线性方程 4.181–4.190 作线性化，得到状态空间描述（另见附录 C.4）：")
+eq("4.234")
+b.para("其参数为", indent=False)
+eq("4.235")
+b.para("其中忽略了活塞位置变化 Δxp 在 VA(xp) 和 VB(xp) 中的影响，以及压力变化 ΔpA、ΔpB 在 "
+       "E′(pA)、E′(pB) 中的影响；dQA 和 dQB 已用式 4.223 和 4.224 代替。", indent=False)
+b.label("4.4.4.3　降阶状态空间模型与频率响应特性（Reduced State-space Model and Frequency Response Characteristics）")
+b.para("本节中首先令阀动态可忽略。然后将导出一个降阶线性模型，用于分析液压系统的频率响应"
+       "特性；另见 Feigel（1987b）。为消去压力 pA 和 pB，把静态关系式 4.218 或 4.219 线性化，"
+       "得到")
+eq("4.236", "4.237")
+b.para("其次，对式 4.216 求导给出", indent=False)
+eq("4.238")
+b.para("现在，作线性化、组合式 4.51 和 4.52 并代入式 4.238，并计入式 4.223、4.224、4.236 和 "
+       "4.237，得到负载压力动态方程", indent=False)
+eq("4.239")
+b.para("其中参数 KQ、Kd 和 Tb 可表示为", indent=False)
+eq("4.240", "4.241", "4.242")
+b.para("最后，把式 4.239 与线性化的式 4.56", indent=False)
+eq("4.243")
+b.para("作拉普拉斯变换（经一些代数运算后）导出", indent=False)
+eq("4.244")
+b.para("于是，液压固有频率由下式给出：")
+eq("4.245")
+b.para("（无量纲）阻尼比由下式给出：", indent=False)
+eq("4.246")
+b.para("若摩擦效应和泄漏流可忽略，ωh 和 Dh 变为", indent=False)
+eq("4.247", "4.248")
+b.para("式 4.244 给出缸对阀位置和负载力两种输入的动态响应；另见图 4.26。")
+fig("4.26")
+b.para("若现在把状态变量和输入变量定义为")
+eq("4.249")
+b.para("则液压缸的降阶线性模型可写为", indent=False)
+eq("4.250")
+b.para("式 4.250 的模型结构是对主导伺服系统动态的紧凑状态空间描述，模型状态由物理量构成。"
+       "该模型有三个极点，其中一个位于原点，表示系统的积分行为；另外两个极点构成一对共轭"
+       "复极点。")
+b.para("阀输入非线性（它是压力和阀输入的函数）有两个效应：引入一个可比拟于泄漏的额外项"
+       "（−1/Tb），并使系统的输入增益随执行器中的压力（即压差）和阀控制信号项（KQ）而变化。"
+       "系统的固有频率由负载质量（Ap/mp）和油腔的刚度（位置相关，Ch）决定。谐振频率的阻尼"
+       "由黏性摩擦（−1/Tm = −Df/mp）和泄漏（−1/Tb）决定。")
+b.para("在大多数情形下，式 4.250 的模型足以描述驱动刚性惯性负载的液压执行器的动态。若负载"
+       "不刚性，而是由某种柔性机械系统构成，则模型须扩展若干描述负载动态的状态，如 4.2.3.5 "
+       "节已处理的那样。")
+b.para("说明。　关于该线性化模型给出若干重要说明：")
+b.bullet("假设到油箱的泄漏可忽略。")
+b.bullet("摩擦效应的参数化只考虑参数 σ，因为线性化过程已把其他（库仑）摩擦参数排除在模型之外"
+         "（只有光滑非线性是相关的）。")
+b.bullet("泄漏和（黏性）摩擦在系统中引入阻尼。设 σ = 0 且 −1/Tb = 0，则式 4.244 的二阶子系统的"
+         "极点将位于虚轴上，即 Dh = 0，且")
+eq("4.251")
+b.para("对称执行器。　对此情形，状态空间模型可更容易地由式 4.213 和 4.232 导出，取如下简单"
+       "形式：", indent=False)
+eq("4.252")
+b.para("关于阀与管道动态的扩展。　据 Heintze（1997），管道动态的行为也可在传递函数 "
+       "pAv*(s)/pAc*(s) 中观察到；见图 4.27。在阀附近测量压差时，测得的管道动态除轻阻尼极点外"
+       "还会显示轻阻尼零点。于是可把描述管道动态的二阶系统表述为", indent=False)
+eq("4.253")
+fig("4.27")
+b.label("4.4.4.4　线性模型的分类（Classification of Linear Models）")
+b.para("如 2.4 节所述，可获得反馈测量装置来感测几乎任何物理量，如位置、速度、加速度、力、"
+       "压力等，并可设计液压伺服系统来控制其中任一量。位置可能是最常被控制的量。对每个被控"
+       "变量，可给出液压系统（阀+执行器）的简化（线性）传递函数，用于分析和控制器设计。"
+       "控制输入是归一化阀电压 u = uv*。")
+b.para("位置控制。　把伺服阀动态模型（式 4.9）与降阶线性执行器模型（式 4.250、图 4.26）组合，"
+       "得到位置控制设计的传递函数（IT4 系统）：")
+eq("4.254")
+b.para("速度控制。　由于速度积分得到位置，速度控制设计的传递函数可由式 4.254 容易地推得"
+       "（PT4 系统）：")
+eq("4.255")
+b.para("加速度控制。　由于速度微分得到加速度，加速度控制的传递函数写为（DT4 系统）：")
+eq("4.256")
+b.para("负载压力（压差）控制。　由式 4.243 可得")
+eq("4.257")
+b.para("于是，负载压力控制的传递函数可表示为（PDT4 系统）：", indent=False)
+eq("4.258")
+b.para("负载力（压差力）控制。　由关系 FL = Ap·pL，得到类似的 PDT4 型传递函数：")
+eq("4.259")
+b.para("流量控制。　对流量控制，传递函数简化为（PT2 系统）：")
+eq("4.260")
+
+# ---- (more sections appended in subsequent passes: 4.5 ...) ----
 
 os.makedirs("parts", exist_ok=True)
 b.save("parts/ch04.docx")
-print("Saved parts/ch04.docx (WIP through 4.2.5)")
+print("Saved parts/ch04.docx (WIP through 4.4)")
