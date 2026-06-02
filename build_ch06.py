@@ -16,19 +16,21 @@ def _band(page, y0, y1, label, dpi=200, pad=7):
     box = fitz.Rect(L-pad, y0, R+pad, y1)
     path = os.path.join("ch6_eqs", f"eq_{label}.png"); page.get_pixmap(dpi=dpi, clip=box).save(path)
     return (path, box.width/72*2.54)
-EXPLICIT_EQ = {"6.100": (250, 232, 256)}   # OCR-invisible label (provisional; refined when reached)
-# (only applied if the page actually matches; refined in the 6.5 pass)
+EXPLICIT_EQ = {"6.100": (249, 163, 228)}   # OCR-invisible label -> explicit band
+for lab, (pg, y0, y1) in EXPLICIT_EQ.items():
+    EQ[lab] = _band(doc[pidx(pg)], y0, y1, lab)
 
 # ---- figures ----
 os.makedirs("ch6_figs", exist_ok=True)
 FIGPAGE = {"6.1": 214, "6.2": 216, "6.3": 217, "6.4": 219, "6.5": 221, "6.6": 223,
            "6.7": 225, "6.8": 225, "6.9": 227, "6.10": 229, "6.11": 230, "6.12": 230,
            "6.13": 231, "6.14": 232, "6.15": 233, "6.16": 234, "6.17": 236,
-           "6.18": 237, "6.19": 242}
+           "6.18": 237, "6.19": 242, "6.20": 244, "6.21": 247, "6.22": 248}
 MANUAL  = {"6.1": (214, 65, 309, 388, 399), "6.6": (223, 65, 80, 388, 230),
            "6.9": (227, 65, 125, 388, 298), "6.12": (230, 65, 375, 388, 478),
            "6.13": (231, 65, 510, 388, 607), "6.16": (234, 65, 425, 388, 495),
-           "6.18": (237, 70, 273, 388, 443), "6.19": (242, 70, 298, 388, 416)}
+           "6.18": (237, 70, 273, 388, 443), "6.19": (242, 70, 298, 388, 416),
+           "6.21": (247, 70, 368, 388, 458)}
 TOPCUT  = {}
 def _figbox(page, fig):
     ws = page.get_text("words"); left = min(w[0] for w in ws); right = max(w[2] for w in ws)
@@ -72,6 +74,9 @@ FIGCAP = {
  "6.17": ("固有频率作为活塞位置（按最大行程归一化）和面积比 α 的函数", "Natural frequency as a function of piston position and area ratio α", 12),
  "6.18": ("用节流-单向阀对差动缸进行速度补偿（Lemmen, 1995）", "Velocity compensation for differential cylinders using throttle-check valves (Lemmen, 1995)", 10),
  "6.19": ("经输入-输出线性化变换后的同步缸模型（含非线性摩擦和非线性流函数）", "Input-output linearised synchronising cylinder model with non-linear friction and flow function", 13),
+ "6.20": ("输入-输出线性化过程的框图", "Block diagram of input-output linearisation procedure", 13),
+ "6.21": ("带极点配置和线性反馈控制器的输入-输出线性化", "Input-output linearisation with pole placement and linear feedback controller", 12.5),
+ "6.22": ("基于反馈线性化的完整控制系统", "Complete control system based on feedback linearisation", 11.5),
 }
 
 b = DocBuilder()
@@ -573,8 +578,128 @@ eq("6.82")
 b.para("利用这一线性关系，可轻易使系统输出呈现期望行为：为此，虚拟信号 v 可选为 y 和 yref（及其"
        "时间导数）的适当函数。注意，本例所考虑的系统是精确可线性化的（因为 r=n 成立）。", indent=False)
 
-# ---- (more sections appended in subsequent passes: 6.5.3 ...) ----
+b.h3("6.5.3　反馈线性化的形式化理论", "Formalised Theory of Feedback Linearisation")
+b.label("6.5.3.1　单输入单输出系统的输入-输出线性化")
+b.para("再次考虑式 6.61 的状态空间表示。反馈线性化分析的出发点是相对阶的形式定义：")
+b.para("定义 6.1（相对阶）。　若对所有 x ∈ Ω（或在 x0 的某邻域内），非线性系统式 6.61 满足 "
+       "(i) Lg Lf^i h(x) = 0（∀ i < r−1），(ii) Lg Lf^(r−1) h(x) ≠ 0，则称它在区域 Ω（或在点 x0）"
+       "具有相对阶 r。", indent=False)
+b.para("对线性系统，该记号化为人们熟悉的相对阶定义——极点数超过零点数之差。注意，相对阶在"
+       "某些点 x0 可能无定义：当输入系数 Lg Lf^(r−1) h(x) 在 x0 为零、但在任意接近 x0 的某些点 x "
+       "不为零时，便会发生。", indent=False)
+b.para("定理 6.1（标准形）。　当相对阶 r（良好）定义且 r < n 时，非线性系统式 6.61 可用坐标变换")
+eq("6.83")
+b.para("（其中 ti(x) 任意）变换为所谓的标准形（normal form，有时称为 Byrnes-Isidori 标准形）", indent=False)
+eq("6.84")
+b.para("在标准形方程上设置状态反馈控制律", indent=False)
+eq("6.85")
+b.para("（其中 v 是外部参考输入），便得到系统", indent=False)
+eq("6.86")
+b.para("显然，该系统被分解为一个维数为 r 的线性子系统（或 r 个积分器的链），它只负责输入-输出"
+       "行为；以及一个维数为 n−r 的可能非线性的子系统，但其行为是“不可观测”的，即不影响"
+       "输出；见图 6.20。", indent=False)
+fig("6.20")
+b.para("线性化反馈可用刻画系统原始描述（式 6.61）的函数 f(x)、g(x)、h(x) 表示，见下述定理。")
+b.para("定理 6.2（输入-输出线性化）。　当相对阶 r（良好）定义且 r < n 时，状态反馈", indent=False)
+eq("6.87")
+b.para("把非线性系统（式 6.61）变换为这样一个系统：其输入-输出行为与具有式 6.68 输入-输出关系"
+       "和式 6.69 传递函数的线性系统相同。", indent=False)
+b.para("在 r = n 的特殊情形下，非线性系统（式 6.61）是精确可线性化（或输入-状态可线性化）的。"
+       "三元组 {f(x), g(x), h(x)} 具有相对阶 n 的条件集由下述定理给出：")
+b.para("定理 6.3（精确线性化）。　非线性系统式 6.61 精确可线性化，当且仅当存在区域 Ω（或点 x0）"
+       "使下列条件成立：(a) 向量场 {g, adf g, …, adf^(n−1) g} 线性无关，即矩阵 [g  adf g  …  "
+       "adf^(n−1) g] 满秩（可控性条件）；(b) 集合 {g, adf g, …, adf^(n−2) g} 在 Ω 内（或在 x0 的"
+       "邻域内）是对合的（involutive，对合性条件）。", indent=False)
+b.para("对合性意味着：若对集合中任意一对向量场作李括号（Lie bracket），则所得向量场可表示为"
+       "原向量场集合的线性组合；见附录 C.3。执行精确线性化（或输入-状态线性化）的方法可见 "
+       "Slotine 与 Li（1991:241-242）。")
+b.label("6.5.3.2　内动态与零动态（Internal and Zero Dynamics）")
+b.para("如上所述，输入-输出线性化把非线性系统分解为一个外部（线性输入-输出）部分和一个内部"
+       "（不可观测）部分。由于控制设计必须顾及整个系统，两部分都必须稳定。外部部分的稳定性"
+       "因可控性标准形（式 6.86）而易于保证，故剩下须研究内动态的稳定行为。考虑式 6.86，定义"
+       "向量")
+eq("6.88")
+b.para("得到", indent=False)
+eq("6.89")
+b.para("则与输入-输出线性化相关的内动态恰好对应于标准形式 6.89 中最后 (n−r) 个方程 q = q(ξ, η)。"
+       "当输入和初始条件被选得约束输出恒等于零时，内动态称为零动态（zero dynamics），写为", indent=False)
+eq("6.90")
+b.para("零动态的重要性由下述定理凸显。", indent=False)
+b.para("定理 6.4（输入-输出可线性化系统的镇定）。　假设非线性系统（式 6.61）具有（良好）定义的"
+       "相对阶 r（r < n），且 (n−r) 维零动态系统（式 6.90）的平凡平衡点局部渐近稳定。在这些条件"
+       "下，控制律（式 6.85）产生一个局部渐近稳定的闭环系统。", indent=False)
+b.para("该结果表明，只要零动态渐近稳定，输入-输出线性化控制律确实能局部（而非全局）镇定整个"
+       "系统。基于部分反馈的全局镇定方法是把控制问题视为标准的 Lyapunov 控制器设计问题，但"
+       "因把系统置于标准形使部分动态线性而得到简化（Slotine and Li, 1991）。")
+b.label("6.5.3.3　输入-输出可线性化系统的控制器设计")
+b.para("一旦非线性系统被变换为具有线性输入-输出关系的系统，控制设计便可用所有著名而有力的"
+       "线性设计技术完成。重要的是，设计控制律无需显式知道系统标准形的表达式，只需知道系统"
+       "具有在 η=0 处局部（或全局）渐近稳定平衡的零动态。一种简单的控制设计方法是线性极点"
+       "配置法，即把新（人工）输入 v 置为")
+eq("6.91")
+b.para("其中 ν 是新外部输入（参考信号 yref 和输出 y 的任意函数）。系数 ki 选得使多项式", indent=False)
+eq("6.92")
+b.para("的所有根严格位于左半平面。由式 6.87，实际控制输入可写为", indent=False)
+eq("6.93")
+b.para("其中可包含如简单线性输出反馈 v = K(yref − y)，得到图 6.21 所示结构。此外，简单极点配置"
+       "控制器可扩展到渐近跟踪控制任务（Isidori, 1995）：", indent=False)
+b.para("定理 6.5（渐近输出跟踪）。　假设非线性系统式 6.61 具有（良好）定义的相对阶 r（r < n），且"
+       "给定的期望轨迹", indent=False)
+eq("6.94")
+b.para("光滑有界。再假设方程", indent=False)
+eq("6.95")
+b.para("的解 ηref 存在、有界且一致渐近稳定。选择常数使式 6.92 的多项式所有根严格在左半平面。"
+       "则使用控制律", indent=False)
+eq("6.96")
+b.para("整个状态保持有界，跟踪误差指数收敛于零。", indent=False)
+fig("6.21")
+b.para("如图 6.21 清楚所示，反馈线性化得到级联控制（或内/外环控制）方案：用于反馈线性化的内环"
+       "把系统动态变换为一组 SISO 非耦合积分器；外环用于配置所得线性系统的极点，使受控系统"
+       "实现期望行为，而与原系统动态无关。机器人文献中著名的内/外环控制例子是计算力矩控制"
+       "（computed torque control）。积分作用也可如 6.3.3 节所述纳入。")
+b.para("迄今所述反馈线性化律假设系统所有状态变量可用。对 HSS 的许多应用，只有活塞位置可直接"
+       "测量，其他状态变量须用状态观测器估计（见 6.10 节）。这导出图 6.22 所示的完整控制方案。")
+fig("6.22")
+b.h3("6.5.4　对液压伺服系统模型的应用", "Application to Hydraulic Servo-system Models")
+b.para("视作为输入-输出线性化基础的 HSS 模型复杂度而定，可导出不同（或多或少复杂的）控制律。")
+b.label("6.5.4.1　对简化 HSS 模型的应用")
+b.para("首先，对子系统“压力动态”（4.4.1 节式 4.196，n=2）以输出方程")
+eq("6.97")
+b.para("进行输入-输出线性化。对该式求导并代入压力动态的状态方程，得", indent=False)
+eq("6.98")
+b.para("由于式 6.98 表示 u 与 y 之间的显式关系，可重排给出状态反馈线性化控制律（对 u ≥ 0）", indent=False)
+eq("6.99")
+b.para("u < 0 的情形的控制律直截了当地为", indent=False)
+eq("6.100")
+b.para("为实际实现线性化控制律，压力 x3 = pA、x4 = pB 以及活塞速度 x2 = ẋp 必须可通过测量或估计"
+       "获得。对所有工况，从新输入 v 到 y = Ap(x3 − αx4) 我们得到精确线性的输入-输出行为。于是"
+       "负载状态方程取如下形式", indent=False)
+eq("6.101")
+b.para("为控制活塞位置，可使用式 6.99、6.100 的控制律以及如简单输出反馈", indent=False)
+eq("6.102")
+b.para("控制律的解释。　总控制律由直接反馈（式 6.102）与速度补偿、泄漏补偿和阀流非线性抵消"
+       "相结合组成：", indent=False)
+eq("6.103")
+b.para("速度补偿用于补偿活塞速度对执行器腔质量平衡的贡献；换言之，速度补偿消除了执行器压力"
+       "动态与活塞-负载动态之间的耦合。泄漏补偿在某些情形下可提高控制器性能，但代价是更多的"
+       "模型知识和更严格的稳定性条件。", indent=False)
+b.label("6.5.4.2　对消去速度的简化 HSS 模型的应用")
+b.para("再次考虑子系统“压力动态”（4.4.1 节式 4.196 和 4.197）。活塞速度不能直接测量，观测器"
+       "又可能因传感器和量化噪声而失效。因此，希望寻找一种不出现速度的压力动态描述。利用 Kugi "
+       "等（1999）给出的思想，在体积模量恒定且两腔相等（即 E′A(x1)=E′B(x4)=:E′）的假设下，"
+       "速度的消去可通过如下变换实现：")
+eq("6.104")
+b.para("于是式 4.196 和 4.197 可改写为（对 u ≥ 0）", indent=False)
+eq("6.105")
+b.para("以及（对 u < 0）", indent=False)
+eq("6.106")
+b.para("注意，式 6.104 不过是腔压力 pA、pB 加上因腔容积变化而产生的压力偏差。现在再次对", indent=False)
+eq("6.107")
+b.para("如上所述进行输入-输出线性化，得到控制律", indent=False)
+eq("6.108")
+
+# ---- (more sections appended in subsequent passes: 6.6 ...) ----
 
 os.makedirs("parts", exist_ok=True)
 b.save("parts/ch06.docx")
-print("Saved parts/ch06.docx (WIP through 6.5.2)")
+print("Saved parts/ch06.docx (WIP through 6.5.4)")
