@@ -21,19 +21,9 @@ for name, pp, yt, yb, xl, xr in CROPS:
                           os.path.join(A, f"f{name}.png"), dpi=200)
 
 b = DocBuilder()
-b.title("液压伺服系统：建模、辨识与控制",
-        "Hydraulic Servo-systems: Modelling, Identification and Control",
-        ["作者：Mohieddine Jelali · Andreas Kroll　|　Springer-Verlag London, 2003",
-         "—— 中文译本（中文为主，关键术语中英对照）——"])
-b.note_box("译者说明",
-    "本文件是该书的中文译本之一，按章交付。译文以中文为主，关键专业术语首次出现时附"
-    "英文原词。原书为扫描+OCR 版，文中插图直接取自原书并以图片形式嵌入，表格则重新"
-    "录入并翻译；正文按原书编号引用图、表。文献引用（作者与年份）保留原文写法。如译文"
-    "与原文有出入，应以英文原著为准。")
-b.page_break()
-
 b.h1("第 2 章　液压伺服系统总述",
-     "CHAPTER 2  GENERAL DESCRIPTION OF HYDRAULIC SERVO-SYSTEMS")
+     "CHAPTER 2  GENERAL DESCRIPTION OF HYDRAULIC SERVO-SYSTEMS",
+     page_break_before=True)
 b.para("本章对液压伺服系统作一般性的刻画，给出一些基本定义，并简要描述液压伺服系统的"
        "若干子系统。深入探讨各子系统的功能/结构细节既不在本章范围之内，也非我们的本意。"
        "为此，读者应查阅标准教材，如 Blackburn 等（1960）、Backe（1992）、Backe 和 "
@@ -455,6 +445,7 @@ b.para("例如，Dutton 和 Groves（1996）提出了一种带简单极点配置
        "控制器。此外，Pedersen（1999）为某些重型中厚板轧机至今仍用于控制辊缝的特殊液压"
        "系统（伺服阀与油缸和润滑脂缸的组合）设计了一种基于反馈线性化的位置控制器。")
 
-out = "译本_第2章 液压伺服系统总述_Hydraulic Servo-systems.docx"
+os.makedirs("parts", exist_ok=True)
+out = "parts/ch02.docx"
 b.save(out)
 print("Saved:", out, os.path.getsize(out), "bytes")

@@ -8,19 +8,7 @@ fig1_1 = crop_region(SRC_PDF, pidx(3), 0.455, 0.89, 0.22, 0.80,
                      os.path.join(ASSET, "fig1_1.png"), dpi=220)
 
 b = DocBuilder()
-b.title("液压伺服系统：建模、辨识与控制",
-        "Hydraulic Servo-systems: Modelling, Identification and Control",
-        ["作者：Mohieddine Jelali　·　Andreas Kroll",
-         "Springer-Verlag London，2003（Advances in Industrial Control 丛书）",
-         "—— 中文译本（中文为主，关键术语中英对照）——"])
-b.note_box("译者说明",
-    "本文件是该书的中文译本之一，按章交付，供学习与技术参考之用。译文以中文为主，"
-    "关键专业术语首次出现时附英文原词。原书为扫描+OCR 版，文中的公式与插图直接取自"
-    "原书并以图片形式嵌入；正文按原书编号引用图、表、公式。文献引用（作者与年份）保留"
-    "原文写法。如译文与原文有出入，应以英文原著为准。")
-b.page_break()
-
-b.h1("第 1 章　引言", "CHAPTER 1  INTRODUCTION")
+b.h1("第 1 章　引言", "CHAPTER 1  INTRODUCTION", page_break_before=True)
 
 b.para("尽管电气驱动（electrical drive）在高性能运动控制中日益普及，液压伺服系统"
        "（hydraulic servo-system）在当今的工业运动系统中仍有着广泛的应用，例如机加工"
@@ -226,6 +214,7 @@ b.bullet("来自德国杜伊斯堡大学机械工程系测量与控制研究室�
 b.bullet("来自荷兰代尔夫特理工大学机械工程系统与控制组的 De Boer（1992）、"
          "Lambrechts（1994）、Heintze（1997）和 van Schothorst（1997）。")
 
-out = "译本_第1章 引言_Hydraulic Servo-systems.docx"
+os.makedirs("parts", exist_ok=True)
+out = "parts/ch01.docx"
 b.save(out)
 print("Saved:", out, os.path.getsize(out), "bytes")

@@ -5,7 +5,9 @@
 中文为主 + 关键术语中英对照。Shared by all per-chapter build scripts.
 """
 import os
+import re
 import fitz  # PyMuPDF
+import numpy as np
 from docx import Document
 from docx.shared import Pt, Cm, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT, WD_LINE_SPACING
@@ -36,6 +38,70 @@ def crop_region(pdf_path, page_index, ytop, ybot, xleft, xright, out_path, dpi=2
     pg.get_pixmap(dpi=dpi, clip=clip).save(out_path)
     doc.close()
     return out_path
+
+
+def _gray_array(page, dpi):
+    pm = page.get_pixmap(dpi=dpi, colorspace=fitz.csGRAY)
+    return (np.frombuffer(pm.samples, dtype=np.uint8).reshape(pm.height, pm.width),
+            pm.width, pm.height)
+
+
+def extract_equations(pdf_path, page_index, chap, out_dir, dpi=200,
+                      gap_mm=2.3, max_mm=26, pad=7):
+    """Auto-crop every numbered equation '(chap.N)' on a scanned page.
+
+    Locates each equation-number label via the OCR text layer, then uses the
+    ink profile of the page image to find the equation's vertical extent.
+    Returns {label_without_parens: image_path} e.g. {'3.6': '.../eq_3.6.png'}.
+    """
+    doc = fitz.open(pdf_path)
+    page = doc[page_index]
+    words = page.get_text("words")
+    if not words:
+        doc.close(); return {}
+    arr, W, H = _gray_array(page, dpi)
+    full = page.get_pixmap(dpi=dpi)
+    sc = dpi / 72.0
+    left = int(min(w[0] for w in words) * sc)
+    right = int(max(w[2] for w in words) * sc) + pad
+    pat = re.compile(r"\(%d\.\d+[a-z]?\)" % chap)
+    out = {}
+    for w in words:
+        if not pat.fullmatch(w[4]):
+            continue
+        x0, y0, x1, y1 = w[:4]
+        px0 = int(x0 * sc); py0 = int(y0 * sc); py1 = int(y1 * sc)
+        c1 = max(left + 5, px0 - 3)
+        col = arr[:, left:c1]
+        ink = (col < 128).sum(axis=1)
+        thr = 2
+        cy = (py0 + py1) // 2
+        maxpx = int(max_mm / 25.4 * dpi)
+        gap = int(gap_mm / 25.4 * dpi)
+        top = cy; bl = 0
+        for r in range(cy, max(0, cy - maxpx), -1):
+            if ink[r] > thr:
+                top = r; bl = 0
+            else:
+                bl += 1
+                if bl >= gap:
+                    break
+        bot = cy; bl = 0
+        for r in range(cy, min(H, cy + maxpx)):
+            if ink[r] > thr:
+                bot = r; bl = 0
+            else:
+                bl += 1
+                if bl >= gap:
+                    break
+        box = (max(0, left - pad), max(0, top - pad), min(W, right), min(H, bot + pad))
+        label = w[4].strip("()")
+        path = os.path.join(out_dir, f"eq_{label}.png")
+        clip = fitz.Rect(box[0] / sc, box[1] / sc, box[2] / sc, box[3] / sc)
+        page.get_pixmap(dpi=dpi, clip=clip).save(path)
+        out[label] = (path, (box[2] - box[0]) / dpi * 2.54)  # path, width_cm
+    doc.close()
+    return out
 
 
 class DocBuilder:
@@ -131,8 +197,10 @@ class DocBuilder:
         self._set_run(box.add_run(title_cn), bold=True, size=10.5)
         self._set_run(box.add_run("\n" + body), size=10.5, color=RGBColor(0x33,0x33,0x33))
 
-    def h1(self, cn, en=None):
+    def h1(self, cn, en=None, page_break_before=False):
         p = self.doc.add_heading(level=1)
+        if page_break_before:
+            p.paragraph_format.page_break_before = True
         self._set_run(p.add_run(cn), latin="Arial", cjk=CJK_BOLD, size=15, bold=True,
                       color=RGBColor(0,0,0))
         if en:
@@ -227,6 +295,15 @@ class DocBuilder:
         if caption_cn:
             cap = self.doc.add_paragraph(); cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
             self._set_run(cap.add_run(caption_cn), size=9.5, color=RGBColor(0x55,0x55,0x55))
+
+    def eq_image(self, eq_entry, max_cm=15.5):
+        """Embed an auto-cropped equation image (path, width_cm), centred."""
+        path, width_cm = eq_entry
+        width_cm = min(width_cm, max_cm)
+        p = self.doc.add_paragraph(); p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p.paragraph_format.space_before = Pt(3); p.paragraph_format.space_after = Pt(3)
+        p.add_run().add_picture(path, width=Cm(width_cm))
+        return p
 
     def _shade(self, cell, hexcolor):
         tcPr = cell._tc.get_or_add_tcPr()
