@@ -1,0 +1,228 @@
+# 《伺服液压》图内德文标注 — 中文对照表
+
+> 原书图表内部的德文标注保持原样未替换；下表按德文字母顺序汇总其中文含义。
+
+| 德文标注 | 中文含义 |
+|---|---|
+| absolut | 绝对（式） |
+| Absolutwert | 绝对值 |
+| Absolutwertgeber | 绝对值传感器 |
+| AC-Motor | 交流电动机 |
+| Amplitudenreserve AR | 幅值裕度 A_R |
+| analog | 模拟（式） |
+| Analog (Strom, Spannung) | 模拟（电流、电压） |
+| Antrieb | 驱动 |
+| Arbeitskolben | 工作活塞 |
+| asymmetrische Schaltung | 非对称电路 |
+| Asynchron | 异步（电动机） |
+| Aufgeprägter Druck | 给定压力 |
+| Aufgeprägter Volumenstrom | 给定流量 |
+| Auflösung | 分辨率 |
+| aus | （下标）流出 / 断开 |
+| Äußerer Regelkreis | 外控制回路 |
+| Ausgangssignal analog | 输出信号（模拟） |
+| Bauaufwand | 结构投入 |
+| Bemerkung | 备注 |
+| Beschleunigungsrückführung | 加速度反馈 |
+| Betriebsdruck [bar] | 工作压力 [bar] |
+| Bewertung | 评价 |
+| Dämpfung D | 阻尼 D |
+| digital | 数字（式） |
+| Dither | 颤振信号（Dither） |
+| Doppelhubmagnet | 双行程电磁铁 |
+| Drehzahlveränderbarer | 变转速的 |
+| Druck | 压力 |
+| Druckabhängige Kennlinienkorrektur | 压力相关特性曲线校正 |
+| Druckaufbau | 压力建立 |
+| Druckaufbau Motor | 马达中的压力建立 |
+| druckfester Stecker erf. | 需耐压插头 |
+| Druckfestigkeit | 耐压性 |
+| Druckminderventil | 减压阀 |
+| durch Federkraft | 通过弹簧力 |
+| durch Gewicht | 通过重力 |
+| Düse | 喷嘴 |
+| ein | （下标）流入 / 接通 |
+| Eingangsleistung | 输入功率 |
+| Einkantensteuerung | 单棱边控制 |
+| Einschleifige Regelung | 单回路调节 |
+| Einstellung des Potentiometers | 电位计的设定 |
+| elektrischer Motor | 电动机 |
+| elektrisches System | 电系统 |
+| elektro-hydraulisch | 电-液（的） |
+| EÖl Hydrauliköl HLP | 液压油 HLP 的等效压缩模量 E_Öl |
+| Federkraft | 弹簧力 |
+| federzentriert | 弹簧定心（的） |
+| Fläche | 面积 |
+| Flap / Flaps | 襟翼（Flap） |
+| Freigabe | 放行（使能） |
+| Frequenz | 频率 |
+| Frequenzgang | 频率响应 |
+| Funktionsumfang analoger und digitaler Regler | 模拟与数字调节器的功能范围 |
+| geringe Kraftdichte | 力密度小 |
+| Geschwindigkeitsverstärkung | 速度增益 |
+| gut | 好 / 良 |
+| Hauptspindel | 主丝杠 |
+| Hilfsregler | 辅助调节器 |
+| hoch | 高 |
+| Hubabhängige Kennlinienkorrektur (geknickte Kennlinie) | 行程相关特性曲线校正（折线特性） |
+| Hubarbeit | 行程功 |
+| Hubarbeit / Bauvolumen | 行程功 / 结构体积 |
+| hydraulisch | 液压（的） |
+| hydraulisches System | 液压系统 |
+| Hysterese | 滞环 |
+| IGBT | IGBT（绝缘栅双极晶体管） |
+| Imaginärteil | 虚部 |
+| induktiv | 电感式 |
+| iNenn | i_nenn（额定电流） |
+| inkremental | 增量式 |
+| Inkrementalgeber | 增量编码器 |
+| Innerer Regelkreis | 内控制回路 |
+| ist | （下标）实际值 |
+| ITSE | ITSE（品质准则） |
+| kapazitiv | 电容式 |
+| kein fail-safe | 无失效保护（fail-safe） |
+| Konstantdrucknetz | 恒压网络 |
+| Korrekturregelung erf. | 需校正调节 |
+| Krafterzeugung | 力的产生 |
+| Kraftverstärkung | 力增益 |
+| Lastdruck pL | 负载压力 p_L |
+| Lastdruckrückführung | 负载压力反馈 |
+| Lastmoment | 负载力矩 |
+| Leckage | 泄漏 |
+| Leckagekennwert | 泄漏特征值 |
+| Leistungskennfeld eines ventilgesteuerten Zylinderantriebs | 阀控液压缸驱动的功率特性场 |
+| Lineare Regler (P, PI, PID, PT1, PDT1) | 线性调节器（P、PI、PID、PT1、PDT1） |
+| Linearität | 线性度 |
+| Linearmotor | 线性马达 |
+| magnetoresistiv | 磁阻式 |
+| magnetostriktiv | 磁致伸缩式 |
+| Makrotranslator | 宏平移器（压电） |
+| mäßig (Steuerkonus) | 中等（控制锥） |
+| Masse | 质量 |
+| max | （下标）最大值 |
+| Maximalkräfte | 最大力 |
+| Mechanik Motor | 马达机械部分 |
+| mechanisch | 机械（式） |
+| mechanisch-hydraulisch | 机械-液压（的） |
+| Messbereich | 测量范围 |
+| Messwert | 测量值 |
+| Mikroprozessor | 微处理器 |
+| min | （下标）最小值 |
+| mittel | 中等 |
+| Motion Control | 运动控制 |
+| Motor | 马达 / 电动机 |
+| n-Regler | 转速调节器 |
+| nein | 否 |
+| nenn | （下标）额定值 |
+| Nichtlineare Erweiterungen (z.B. schaltender Integrierer) | 非线性扩展（如切换积分器） |
+| nist | n_ist（实际转速） |
+| Norm. Bandbreite | 归一化带宽 |
+| Norm. Geschwindigkeit x/xG,max | 归一化速度 ẋ/ẋ_G,max |
+| Norm. Kreisverstärkung | 归一化回路增益 |
+| Normierte Lastkraft FL/F0 | 归一化负载力 F_L/F_0 |
+| nsoll | n_soll（给定转速） |
+| Nullpunkt | 零点 |
+| Ölsteifigkeit | 油液刚度 |
+| optimales Führungsverhalten | 最优跟随特性 |
+| optimales Störverhalten | 最优抗扰特性 |
+| optisch | 光学式 |
+| P-Regler | P 调节器 |
+| p0 = const | p₀ = 常数 |
+| pA,aus | p_A,aus（A 侧流出） |
+| PD-Regler | PD 调节器 |
+| PDT1-Regler | PDT1 调节器 |
+| Phasenreserve φR | 相位裕度 φ_R |
+| Pilot | 先导（电动机） |
+| PISCHALT-Regler | PISCHALT 调节器（带切换 I 分量的 P 调节器） |
+| pist | p_ist（实际压力） |
+| potentiometrisch | 电位计式 |
+| PPT1-Regler | PPT1 调节器 |
+| Prallplatte: 0,035 mm | 挡板：0.035 mm |
+| Pumpe | 泵 |
+| Pumpenstellsignal | 泵变量信号 |
+| Pumpenstellweg y/ymax | 泵变量行程 y/y_max |
+| pVA | p_VA（阀 A 侧先导压力） |
+| pVB | p_VB（阀 B 侧先导压力） |
+| pVL = pVA - pVB | p_VL = p_VA − p_VB（阀芯负载压力） |
+| Qth | Q_th（理论流量） |
+| Quelle: Magnet Schultz | 来源：Magnet Schultz |
+| Quelle: Novotechnik | 来源：Novotechnik |
+| QVL | Q_VL（阀先导级负载流量） |
+| QVth | Q_Vth（阀先导级理论流量） |
+| Rampengenerator | 斜坡发生器 |
+| Regeleinheit | 调节单元 |
+| Regelelektronik | 调节电子 |
+| Regelkreis Führungsverhalten | 控制回路 跟随特性 |
+| Regelventil | 调节阀 |
+| Regler | 调节器 |
+| Reglerfunktionen | 调节器功能 |
+| Reibkennwert | 摩擦特征值 |
+| resistiv | 电阻式 |
+| Rotationsmotor | 旋转马达 |
+| Rückstellfeder | 回复弹簧 |
+| Schnittstellen | 接口 |
+| Schweißnaht | 焊缝 |
+| Sensoren für Weg- und Winkelmessungen | 位移和角度测量传感器 |
+| Serielle Kommunikation (SSI), Feldbus | 串行通信（SSI）、现场总线 |
+| Servo | 伺服 |
+| Servopumpe | 伺服泵 |
+| Signalverarbeitung | 信号处理 |
+| soll | （下标）给定值 |
+| Sollwert | 给定值 |
+| Sollwertgenerator | 给定值发生器 |
+| Sollwertvorgabe | 给定值设定 |
+| Standardausführung | 标准型 |
+| Stapeltranslator | 叠堆式平移器（压电） |
+| Staudruck | 滞止压力（动压） |
+| Stellelement | 调节元件 |
+| Stellglied | 调节元件 |
+| Stellsystem | 变量系统（调节系统） |
+| Stellweg | 调节行程 |
+| Stellzylinder | 变量缸（调节缸） |
+| Steuerkette Servopumpe – Linearmotor | 控制链 伺服泵–直线马达 |
+| Steuerkette Servopumpe – Rotationsmotor | 控制链 伺服泵–旋转马达 |
+| Steuerkette Stetigventil – Linearmotor | 控制链 连续阀–直线马达 |
+| Steuerkette Stetigventil – Linearmotor (Differentialzylinder) | 控制链 连续阀–直线马达（差动缸） |
+| Steuerkette Stetigventil – Rotationsmotor | 控制链 连续阀–旋转马达 |
+| Steuerspindel | 控制丝杠 |
+| Steuerung | 控制（开环） |
+| Störverhalten | 抗扰特性 |
+| Strecke | 被控对象 |
+| Strom [A] | 电流 [A] |
+| symmetrische Schaltung | 对称电路 |
+| Tank | 油箱 |
+| Tankleitung | 油箱管路 |
+| teurer Permanentmagnet | 昂贵的永磁体 |
+| Torquemotor | 力矩马达 |
+| Trägheitsmoment | 转动惯量 |
+| Trajektorien | 轨迹 |
+| Typische Ventilkennlinien bei Nullüberdeckung | 零遮盖时的典型阀特性曲线 |
+| Umax | U_max（最大电压） |
+| Umrichter | 变频器 |
+| unüblich für Stetigventile | 对连续阀不常用 |
+| Ventil | 阀 |
+| Ventil dynamisch | 阀（动态） |
+| Ventil statisch | 阀（静态） |
+| Ventilgesteuerter Antrieb mit nullüberdecktem Ventil | 带零遮盖阀的阀控驱动 |
+| Ventilhauptstufe | 阀主级 |
+| Ventilhülse | 阀套 |
+| Ventilschieber | 阀芯 |
+| Ventilschieberweg yV/yV,max | 阀芯位移 y_V/y_Vmax |
+| Verbraucher | 消耗器 |
+| Verstelleinheit | 变量单元 |
+| Verstellmotor | 变量马达 |
+| Verstellpumpe | 变量泵 |
+| Vierkantensteuerung | 四棱边控制 |
+| VKS | V_KS（调节系统回路增益） |
+| Vorsteuerkammer | 先导腔 |
+| Vorsteuerung | 先导控制 |
+| VQp | V_Qp（流量-压力增益） |
+| Wegsensor | 位移传感器 |
+| Wirkprinzip | 作用原理 |
+| Wirkungsgrad als Funktion von Lastkraft und Flächenverhältnis | 效率随负载力和面积比的变化 |
+| Zeit t | 时间 t |
+| Zeittakt | 时间节拍 |
+| Zweikantensteuerung | 两棱边控制 |
+| Zweischleifige Regelung | 双回路调节 |
+| Zylinder | 液压缸 |
+| ωZ,min | ω_Zmin（液压缸最小固有圆频率） |

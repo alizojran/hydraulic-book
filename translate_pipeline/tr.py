@@ -133,6 +133,35 @@ def cmd_assemble(out):
     san = lambda s: re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', ' ', s)
     HSTYLE = {"h1": "Heading 1", "h2": "Heading 2", "h3": "Heading 3"}
     MAXW = 6.0  # inches
+
+    # ---- generated table of contents (built from heading structure) ----
+    tt = doc.add_paragraph()
+    tt.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    rr = tt.add_run("目　　录")
+    rr.bold = True
+    rr.font.size = Pt(16)
+    for p in data["pages"]:
+        for e in p["elements"]:
+            if e.get("t") not in ("h1", "h2", "h3"):
+                continue
+            zh = tr.get(e["k"])
+            if not zh:
+                continue
+            zh = san(zh).strip()
+            if not zh:
+                continue
+            lvl = {"h1": 0, "h2": 1, "h3": 2}[e["t"]]
+            par = doc.add_paragraph()
+            par.paragraph_format.left_indent = Pt(16 * lvl)
+            par.paragraph_format.space_after = Pt(1)
+            run = par.add_run(zh)
+            if lvl == 0:
+                run.bold = True
+                run.font.size = Pt(11.5)
+            else:
+                run.font.size = Pt(10)
+    doc.add_page_break()
+
     missing = 0
     for p in data["pages"]:
         for e in p["elements"]:

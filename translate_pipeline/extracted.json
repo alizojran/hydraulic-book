@@ -1429,6 +1429,11 @@
      "w": 108.8
     },
     {
+     "k": 90001,
+     "t": "h1",
+     "de": "1 EINLEITUNG"
+    },
+    {
      "k": 227,
      "t": "p",
      "de": "Geregelte hydraulische Antriebe kommen in vielfältigen Anwendungen in der Stationär- und Mobilhydraulik zum Einsatz /Bac92/, /Feu00/, /Hel04/, /Mur06/. Die Technologie dieser geregelten Antriebe wird auch als Servohydraulik bezeichnet und unter diesem Begriff seit langer Zeit gelehrt. Es werden hier alle Bereiche der Hydraulik zusammengefasst, bei denen hydraulische Geräte in Regelkreisen arbeiten und die Eingangssignale um ein Vielfaches verstärkt werden. Die geregelten Größen sind im Allgemeinen mechanische Größen - wie Weg, Geschwindigkeit, Beschleunigung oder Kraft bzw. die vergleichbaren Größen Drehwinkel, Drehzahl oder Drehmoment - oder hydraulische Größen, wie Volumenstrom oder Druck. Die Eingangssignale dieser geregelten Antriebe sind in der Regel elektrische Signale. Da die Antriebe zunehmend höher integriert werden und Sensoren sowie dezentrale Intelligenz und Signalverarbeitung beinhalten, spricht man auch von Mechatronik oder mechatronischen Antrieben /Ise99/, /Jan04/. In historischen Systemlösungen sowie Sonderfällen der Anwendung werden statt elektrischer Eingangssignale auch mechanische, pneumatische oder hydraulische genutzt. Hierauf wird in verschiedenen Kapiteln näher eingegangen. Ein bekanntes Beispiel aus dem Werkzeugmaschinenbau aus der Zeit vor dem Einzug NC-gesteuerter Maschinen waren die Kopiersteuerungen oder Linearverstärker /Bac92/, siehe auch Bild 8.52."
@@ -2491,6 +2496,11 @@
      "t": "fig",
      "img": "images/p049_f0.png",
      "w": 129.1
+    },
+    {
+     "k": 90003,
+     "t": "h1",
+     "de": "3 STELLGLIEDER"
     },
     {
      "k": 378,

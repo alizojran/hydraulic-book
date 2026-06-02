@@ -1,0 +1,1542 @@
+[
+ {
+  "de": "ist",
+  "n": 24,
+  "page": 315
+ },
+ {
+  "de": "soll",
+  "n": 21,
+  "page": 221
+ },
+ {
+  "de": "max",
+  "n": 17,
+  "page": 183
+ },
+ {
+  "de": "Regler",
+  "n": 17,
+  "page": 158
+ },
+ {
+  "de": "Stellzylinder",
+  "n": 9,
+  "page": 244
+ },
+ {
+  "de": "Ventil",
+  "n": 9,
+  "page": 83
+ },
+ {
+  "de": "Pumpe",
+  "n": 7,
+  "page": 244
+ },
+ {
+  "de": "Motor",
+  "n": 6,
+  "page": 221
+ },
+ {
+  "de": "nein",
+  "n": 6,
+  "page": 145
+ },
+ {
+  "de": "Norm. Kreisverstärkung",
+  "n": 6,
+  "page": 358
+ },
+ {
+  "de": "Rotationsmotor",
+  "n": 5,
+  "page": 263
+ },
+ {
+  "de": "digital",
+  "n": 4,
+  "page": 128
+ },
+ {
+  "de": "ges",
+  "n": 4,
+  "page": 234
+ },
+ {
+  "de": "Linearmotor",
+  "n": 4,
+  "page": 60
+ },
+ {
+  "de": "Norm. Bandbreite",
+  "n": 4,
+  "page": 359
+ },
+ {
+  "de": "Regelventil",
+  "n": 4,
+  "page": 244
+ },
+ {
+  "de": "ventil",
+  "n": 4,
+  "page": 308
+ },
+ {
+  "de": "bar",
+  "n": 3,
+  "page": 284
+ },
+ {
+  "de": "Diff",
+  "n": 3,
+  "page": 279
+ },
+ {
+  "de": "Lastdruck pL",
+  "n": 3,
+  "page": 50
+ },
+ {
+  "de": "Norm. Geschwindigkeit x/x1,max",
+  "n": 3,
+  "page": 194
+ },
+ {
+  "de": "optisch",
+  "n": 3,
+  "page": 128
+ },
+ {
+  "de": "PID",
+  "n": 3,
+  "page": 152
+ },
+ {
+  "de": "Qth",
+  "n": 3,
+  "page": 234
+ },
+ {
+  "de": "sign",
+  "n": 3,
+  "page": 183
+ },
+ {
+  "de": "Volumenstrom Q",
+  "n": 3,
+  "page": 50
+ },
+ {
+  "de": "0 max",
+  "n": 2,
+  "page": 220
+ },
+ {
+  "de": "absolut",
+  "n": 2,
+  "page": 128
+ },
+ {
+  "de": "AC-Motor",
+  "n": 2,
+  "page": 249
+ },
+ {
+  "de": "Antrieb",
+  "n": 2,
+  "page": 326
+ },
+ {
+  "de": "asymmetrische",
+  "n": 2,
+  "page": 220
+ },
+ {
+  "de": "Bauaufwand",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "Bemerkung",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "Druck",
+  "n": 2,
+  "page": 318
+ },
+ {
+  "de": "Druckfestigkeit",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "durch",
+  "n": 2,
+  "page": 338
+ },
+ {
+  "de": "Eingangsleistung",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "erreichbare Dynamik",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "erreichbare Hübe",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "federzentriert",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "Freigabe",
+  "n": 2,
+  "page": 338
+ },
+ {
+  "de": "gut",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "Hubarbeit",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "Hubarbeit / Bauvolumen",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "Hysterese",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "Imaginärteil",
+  "n": 2,
+  "page": 321
+ },
+ {
+  "de": "Konstantdrucknetz",
+  "n": 2,
+  "page": 338
+ },
+ {
+  "de": "Leckagekennwert",
+  "n": 2,
+  "page": 256
+ },
+ {
+  "de": "Linearität",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "mag",
+  "n": 2,
+  "page": 145
+ },
+ {
+  "de": "Maximalkräfte",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "mechanisch",
+  "n": 2,
+  "page": 37
+ },
+ {
+  "de": "mittel",
+  "n": 2,
+  "page": 145
+ },
+ {
+  "de": "motor",
+  "n": 2,
+  "page": 373
+ },
+ {
+  "de": "neto",
+  "n": 2,
+  "page": 145
+ },
+ {
+  "de": "nist",
+  "n": 2,
+  "page": 318
+ },
+ {
+  "de": "Normierte Lastkraft FL/F1",
+  "n": 2,
+  "page": 194
+ },
+ {
+  "de": "P-Regler",
+  "n": 2,
+  "page": 342
+ },
+ {
+  "de": "PDT",
+  "n": 2,
+  "page": 152
+ },
+ {
+  "de": "Pilot",
+  "n": 2,
+  "page": 373
+ },
+ {
+  "de": "pist",
+  "n": 2,
+  "page": 318
+ },
+ {
+  "de": "pVA",
+  "n": 2,
+  "page": 56
+ },
+ {
+  "de": "pVB",
+  "n": 2,
+  "page": 56
+ },
+ {
+  "de": "QVth",
+  "n": 2,
+  "page": 234
+ },
+ {
+  "de": "Regel",
+  "n": 2,
+  "page": 338
+ },
+ {
+  "de": "Regeleinheit",
+  "n": 2,
+  "page": 326
+ },
+ {
+  "de": "regler",
+  "n": 2,
+  "page": 318
+ },
+ {
+  "de": "Reibkennwert",
+  "n": 2,
+  "page": 256
+ },
+ {
+  "de": "rückführung",
+  "n": 2,
+  "page": 342
+ },
+ {
+  "de": "Servopumpe",
+  "n": 2,
+  "page": 271
+ },
+ {
+  "de": "Sollwert",
+  "n": 2,
+  "page": 231
+ },
+ {
+  "de": "Standardausführung",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "Stellglied",
+  "n": 2,
+  "page": 326
+ },
+ {
+  "de": "Stellsystem",
+  "n": 2,
+  "page": 281
+ },
+ {
+  "de": "Stellweg",
+  "n": 2,
+  "page": 342
+ },
+ {
+  "de": "Steuerung",
+  "n": 2,
+  "page": 338
+ },
+ {
+  "de": "Tankleitung",
+  "n": 2,
+  "page": 338
+ },
+ {
+  "de": "teure Permanentmagnete",
+  "n": 2,
+  "page": 52
+ },
+ {
+  "de": "tiv",
+  "n": 2,
+  "page": 145
+ },
+ {
+  "de": "Torquemotor",
+  "n": 2,
+  "page": 234
+ },
+ {
+  "de": "Umrichter",
+  "n": 2,
+  "page": 249
+ },
+ {
+  "de": "Ventilhauptstufe",
+  "n": 2,
+  "page": 234
+ },
+ {
+  "de": "Ventilhülse",
+  "n": 2,
+  "page": 60
+ },
+ {
+  "de": "Ventilschieber",
+  "n": 2,
+  "page": 58
+ },
+ {
+  "de": "VKS",
+  "n": 2,
+  "page": 271
+ },
+ {
+  "de": "Zeit t",
+  "n": 2,
+  "page": 100
+ },
+ {
+  "de": "2LeA",
+  "n": 1,
+  "page": 262
+ },
+ {
+  "de": "2LeB",
+  "n": 1,
+  "page": 262
+ },
+ {
+  "de": "< 3% gesteuert",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "< 5% gesteuert",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "= 70 bar",
+  "n": 1,
+  "page": 82
+ },
+ {
+  "de": "a) Stapeltranslator",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "A,ein",
+  "n": 1,
+  "page": 191
+ },
+ {
+  "de": "Absolutwert",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "alternative",
+  "n": 1,
+  "page": 338
+ },
+ {
+  "de": "Amplitudenreserve AR",
+  "n": 1,
+  "page": 430
+ },
+ {
+  "de": "analog",
+  "n": 1,
+  "page": 128
+ },
+ {
+  "de": "Analog (Strom, Spannung",
+  "n": 1,
+  "page": 159
+ },
+ {
+  "de": "analog analog digital",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "Arbeitskolben",
+  "n": 1,
+  "page": 373
+ },
+ {
+  "de": "Asynchron",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "auch gesteuert gut",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "Auflösung",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "aus",
+  "n": 1,
+  "page": 191
+ },
+ {
+  "de": "Aus den vorangehenden Ausführungen geht hervor, dass der Gleichgangzylinder als",
+  "n": 1,
+  "page": 215
+ },
+ {
+  "de": "Ausgangssignal analog",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "b) Disk",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "B+E) oder (C+E",
+  "n": 1,
+  "page": 220
+ },
+ {
+  "de": "Bei der Herleitung der Kennlinienfeldgleichungen muss bei der Nullüberdeckung",
+  "n": 1,
+  "page": 182
+ },
+ {
+  "de": "berücksichtigt werden, dass die Durchflussgleichungen vom Vorzeichen der Steuer",
+  "n": 1,
+  "page": 182
+ },
+ {
+  "de": "Beschleunigungsrückführung",
+  "n": 1,
+  "page": 388
+ },
+ {
+  "de": "Betriebsdruck [ bar",
+  "n": 1,
+  "page": 85
+ },
+ {
+  "de": "Bewertung",
+  "n": 1,
+  "page": 220
+ },
+ {
+  "de": "Bild 6.14",
+  "n": 1,
+  "page": 182
+ },
+ {
+  "de": "Bild 6.19",
+  "n": 1,
+  "page": 188
+ },
+ {
+  "de": "Bild 6.20",
+  "n": 1,
+  "page": 189
+ },
+ {
+  "de": "Bild 6.21",
+  "n": 1,
+  "page": 191
+ },
+ {
+  "de": "Bild 6.22",
+  "n": 1,
+  "page": 193
+ },
+ {
+  "de": "Bild 6.32",
+  "n": 1,
+  "page": 215
+ },
+ {
+  "de": "c) Makrotranslator",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "ca. 1,2 Nmm/cm³",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "Die Gleichungen ( 6.61), ( 6.62), ( 6.66) und ( 6.69) liefern die Geschwindigkeiten",
+  "n": 1,
+  "page": 191
+ },
+ {
+  "de": "Die Kennwerte E0 und C0 können wie bei den Ventilsteuerungen mit negativer",
+  "n": 1,
+  "page": 182
+ },
+ {
+  "de": "Dither",
+  "n": 1,
+  "page": 159
+ },
+ {
+  "de": "Doppelhubmagnet",
+  "n": 1,
+  "page": 58
+ },
+ {
+  "de": "Drehzahlveränderbarer",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "Druckabhängige Kennlinienkorrektur",
+  "n": 1,
+  "page": 159
+ },
+ {
+  "de": "Druckaufbau",
+  "n": 1,
+  "page": 234
+ },
+ {
+  "de": "Druckaufbau Motor",
+  "n": 1,
+  "page": 262
+ },
+ {
+  "de": "druckfester Stecker erf",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "Druckminder",
+  "n": 1,
+  "page": 308
+ },
+ {
+  "de": "Drucksignalkennlinie [Dup10] b) Volumenstromsignalkennlinie",
+  "n": 1,
+  "page": 189
+ },
+ {
+  "de": "durch Federkraft",
+  "n": 1,
+  "page": 37
+ },
+ {
+  "de": "durch Gewicht",
+  "n": 1,
+  "page": 37
+ },
+ {
+  "de": "Durchflusswiderstände stellen sich die Volumenströme über die Steuerkanten des",
+  "n": 1,
+  "page": 189
+ },
+ {
+  "de": "Dämpfung D",
+  "n": 1,
+  "page": 203
+ },
+ {
+  "de": "Düse",
+  "n": 1,
+  "page": 65
+ },
+ {
+  "de": "ein",
+  "n": 1,
+  "page": 191
+ },
+ {
+  "de": "Einkantensteuerung",
+  "n": 1,
+  "page": 220
+ },
+ {
+  "de": "Einschleifige Regelung",
+  "n": 1,
+  "page": 342
+ },
+ {
+  "de": "Einstellung des elektrischen",
+  "n": 1,
+  "page": 131
+ },
+ {
+  "de": "Einstellung des Potentiometer",
+  "n": 1,
+  "page": 131
+ },
+ {
+  "de": "elektrischer Motor",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "elektrisches System",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "elektro - hydraulisch",
+  "n": 1,
+  "page": 338
+ },
+ {
+  "de": "EÖl Hydrauliköl HLP",
+  "n": 1,
+  "page": 283
+ },
+ {
+  "de": "Flap",
+  "n": 1,
+  "page": 399
+ },
+ {
+  "de": "Flaps",
+  "n": 1,
+  "page": 399
+ },
+ {
+  "de": "Fläche",
+  "n": 1,
+  "page": 256
+ },
+ {
+  "de": "Frequenz",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "Frequenzgang",
+  "n": 1,
+  "page": 342
+ },
+ {
+  "de": "Funktionsumfang analoger und digitaler Regler",
+  "n": 1,
+  "page": 159
+ },
+ {
+  "de": "generator",
+  "n": 1,
+  "page": 158
+ },
+ {
+  "de": "geringe Kraftdichte",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "Geschwindigkeitsverstärkung",
+  "n": 1,
+  "page": 182
+ },
+ {
+  "de": "gesteuert < 4 %",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "Hauptspindel",
+  "n": 1,
+  "page": 373
+ },
+ {
+  "de": "Hilfsregler",
+  "n": 1,
+  "page": 326
+ },
+ {
+  "de": "hoch",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "hoch (präzise Teile erf",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "Hubabhängige Kennlinienkorrektur (geknickte Kennlinie",
+  "n": 1,
+  "page": 159
+ },
+ {
+  "de": "hydraulisch",
+  "n": 1,
+  "page": 37
+ },
+ {
+  "de": "hydraulisches System",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "IGBT",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "induk",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "induktiv",
+  "n": 1,
+  "page": 128
+ },
+ {
+  "de": "iNenn",
+  "n": 1,
+  "page": 284
+ },
+ {
+  "de": "inenn",
+  "n": 1,
+  "page": 284
+ },
+ {
+  "de": "inkre",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "inkremental",
+  "n": 1,
+  "page": 128
+ },
+ {
+  "de": "Inkrementalgeber",
+  "n": 1,
+  "page": 159
+ },
+ {
+  "de": "Innerer Regelkreis",
+  "n": 1,
+  "page": 394
+ },
+ {
+  "de": "ITSE",
+  "n": 1,
+  "page": 436
+ },
+ {
+  "de": "Kammerdrücke über Lastdruck (links) und Flächenverhältnis (rechts",
+  "n": 1,
+  "page": 191
+ },
+ {
+  "de": "kapazi",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "kapazitiv",
+  "n": 1,
+  "page": 128
+ },
+ {
+  "de": "kein fail-safe",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "Korrekturregelung erf",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "Krafterzeugung",
+  "n": 1,
+  "page": 37
+ },
+ {
+  "de": "Kraftverstärkung",
+  "n": 1,
+  "page": 182
+ },
+ {
+  "de": "KSLi",
+  "n": 1,
+  "page": 244
+ },
+ {
+  "de": "Lastdruckrückführung",
+  "n": 1,
+  "page": 388
+ },
+ {
+  "de": "Lastmoment",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "Leckage",
+  "n": 1,
+  "page": 373
+ },
+ {
+  "de": "Leistungskennfeld eines ventilgesteuerten Zylinderantriebs",
+  "n": 1,
+  "page": 193
+ },
+ {
+  "de": "Lineare Regler (P, PI, PID, PT1, PDT1",
+  "n": 1,
+  "page": 159
+ },
+ {
+  "de": "magnetoresistiv",
+  "n": 1,
+  "page": 128
+ },
+ {
+  "de": "magnetostriktiv",
+  "n": 1,
+  "page": 128
+ },
+ {
+  "de": "maschine",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "Masse",
+  "n": 1,
+  "page": 256
+ },
+ {
+  "de": "Mechanik Motor",
+  "n": 1,
+  "page": 262
+ },
+ {
+  "de": "mechanisch - hydraulisch",
+  "n": 1,
+  "page": 338
+ },
+ {
+  "de": "men werden. Die Herleitung erfolgt im Übrigen analog zur negativen Überdeckung",
+  "n": 1,
+  "page": 182
+ },
+ {
+  "de": "mental",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "Messbereichs",
+  "n": 1,
+  "page": 131
+ },
+ {
+  "de": "Messwert",
+  "n": 1,
+  "page": 128
+ },
+ {
+  "de": "Mikroprozessor",
+  "n": 1,
+  "page": 60
+ },
+ {
+  "de": "Motion Control",
+  "n": 1,
+  "page": 158
+ },
+ {
+  "de": "mäßig (Steuerkonus",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "n-Regler",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "nenn",
+  "n": 1,
+  "page": 82
+ },
+ {
+  "de": "Nichtlineare Erweiterungen (z.B. schaltender Integrierer",
+  "n": 1,
+  "page": 159
+ },
+ {
+  "de": "Norm. Geschwindigkeit x/xG,max",
+  "n": 1,
+  "page": 194
+ },
+ {
+  "de": "Normierte Lastkraft FL/F0",
+  "n": 1,
+  "page": 194
+ },
+ {
+  "de": "Normierte Lastkraft FL/F0,1",
+  "n": 1,
+  "page": 194
+ },
+ {
+  "de": "nsoll",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "Nullpunktes",
+  "n": 1,
+  "page": 131
+ },
+ {
+  "de": "nur mit Regelung gering",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "nur mit Regelung gut",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "ohne Regelung gering",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "ohne Regelung mäßig",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "optimales Führungsverhalten",
+  "n": 1,
+  "page": 430
+ },
+ {
+  "de": "optimales Störverhalten",
+  "n": 1,
+  "page": 430
+ },
+ {
+  "de": "P-Regler mit",
+  "n": 1,
+  "page": 342
+ },
+ {
+  "de": "p0 = const",
+  "n": 1,
+  "page": 280
+ },
+ {
+  "de": "pA,aus",
+  "n": 1,
+  "page": 191
+ },
+ {
+  "de": "Par08a",
+  "n": 1,
+  "page": 189
+ },
+ {
+  "de": "PD-Regler",
+  "n": 1,
+  "page": 342
+ },
+ {
+  "de": "PD-Regler mit",
+  "n": 1,
+  "page": 342
+ },
+ {
+  "de": "PDT1",
+  "n": 1,
+  "page": 152
+ },
+ {
+  "de": "PDT1 - Regler",
+  "n": 1,
+  "page": 354
+ },
+ {
+  "de": "Phasenreserve • R",
+  "n": 1,
+  "page": 430
+ },
+ {
+  "de": "PISCHALT - Regler",
+  "n": 1,
+  "page": 354
+ },
+ {
+  "de": "poten",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "potentiometrisch",
+  "n": 1,
+  "page": 128
+ },
+ {
+  "de": "PPT1 - Regler",
+  "n": 1,
+  "page": 354
+ },
+ {
+  "de": "Prallpl.: 0,035 mm",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "Pumpenstellsignal",
+  "n": 1,
+  "page": 287
+ },
+ {
+  "de": "Pumpenstellweg y/ymax",
+  "n": 1,
+  "page": 100
+ },
+ {
+  "de": "pVL",
+  "n": 1,
+  "page": 234
+ },
+ {
+  "de": "pVL = p - p",
+  "n": 1,
+  "page": 56
+ },
+ {
+  "de": "QSL",
+  "n": 1,
+  "page": 245
+ },
+ {
+  "de": "Quelle: Magnet Schultz",
+  "n": 1,
+  "page": 135
+ },
+ {
+  "de": "Quelle: novotechnik",
+  "n": 1,
+  "page": 135
+ },
+ {
+  "de": "QVL",
+  "n": 1,
+  "page": 234
+ },
+ {
+  "de": "Rampengenerator",
+  "n": 1,
+  "page": 159
+ },
+ {
+  "de": "Regelelektronik",
+  "n": 1,
+  "page": 58
+ },
+ {
+  "de": "Regelkreis Führungsverhalten",
+  "n": 1,
+  "page": 158
+ },
+ {
+  "de": "Reglerfunktionen",
+  "n": 1,
+  "page": 159
+ },
+ {
+  "de": "resistiv",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "Rückstellfeder",
+  "n": 1,
+  "page": 60
+ },
+ {
+  "de": "schieberauslenkung abhängig sind. Es muss also eine Fallunterscheidung vorgenom",
+  "n": 1,
+  "page": 182
+ },
+ {
+  "de": "Schnittstellen",
+  "n": 1,
+  "page": 159
+ },
+ {
+  "de": "schritt",
+  "n": 1,
+  "page": 373
+ },
+ {
+  "de": "Schweißnaht",
+  "n": 1,
+  "page": 307
+ },
+ {
+  "de": "sehr hoch sehr",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "Sensoren für Weg- und Winkelmessungen",
+  "n": 1,
+  "page": 128
+ },
+ {
+  "de": "Serielle Kommunikation (SSI), Feldbus",
+  "n": 1,
+  "page": 159
+ },
+ {
+  "de": "Servo",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "Signalverarbeitung",
+  "n": 1,
+  "page": 128
+ },
+ {
+  "de": "SLi",
+  "n": 1,
+  "page": 244
+ },
+ {
+  "de": "Sollwertgenerator",
+  "n": 1,
+  "page": 159
+ },
+ {
+  "de": "Sollwertvorgabe",
+  "n": 1,
+  "page": 338
+ },
+ {
+  "de": "Staudruck",
+  "n": 1,
+  "page": 57
+ },
+ {
+  "de": "Stellelement",
+  "n": 1,
+  "page": 221
+ },
+ {
+  "de": "Steuerkette Servopumpe – Linearmotor",
+  "n": 1,
+  "page": 273
+ },
+ {
+  "de": "Steuerkette Servopumpe – Rotationsmotor",
+  "n": 1,
+  "page": 271
+ },
+ {
+  "de": "Steuerkette Stetigventil - Linearmotor (Differentialzylinder",
+  "n": 1,
+  "page": 279
+ },
+ {
+  "de": "Steuerkette Stetigventil – Linearmotor",
+  "n": 1,
+  "page": 270
+ },
+ {
+  "de": "Steuerkette Stetigventil – Rotationsmotor",
+  "n": 1,
+  "page": 266
+ },
+ {
+  "de": "Steuerspindel",
+  "n": 1,
+  "page": 373
+ },
+ {
+  "de": "Strecke",
+  "n": 1,
+  "page": 158
+ },
+ {
+  "de": "striktiv",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "Strom [A",
+  "n": 1,
+  "page": 231
+ },
+ {
+  "de": "Störverhalten",
+  "n": 1,
+  "page": 158
+ },
+ {
+  "de": "symmetrische",
+  "n": 1,
+  "page": 220
+ },
+ {
+  "de": "Tank",
+  "n": 1,
+  "page": 373
+ },
+ {
+  "de": "teuer und (a) baut lang",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "teurer Permanentmagnet",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "tiome",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "Trajektorien",
+  "n": 1,
+  "page": 158
+ },
+ {
+  "de": "trisch",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "Trägheitsmoment",
+  "n": 1,
+  "page": 256
+ },
+ {
+  "de": "typ. 350 Hz",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "typ. 50 W",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "Typische Ventilkennlinien bei Nullüberdeckung, a",
+  "n": 1,
+  "page": 189
+ },
+ {
+  "de": "Umax",
+  "n": 1,
+  "page": 249
+ },
+ {
+  "de": "umrichter",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "unüblich für Stetigventile",
+  "n": 1,
+  "page": 52
+ },
+ {
+  "de": "Ventil dynamisch",
+  "n": 1,
+  "page": 262
+ },
+ {
+  "de": "Ventil statisch",
+  "n": 1,
+  "page": 262
+ },
+ {
+  "de": "Ventilgesteuerter Antrieb mit nullüberdecktem Ventil",
+  "n": 1,
+  "page": 182
+ },
+ {
+  "de": "Ventils in Abhängigkeit von den abfallenden Druckdifferenzen gemäß",
+  "n": 1,
+  "page": 189
+ },
+ {
+  "de": "Ventilschieberweg yV/yV max",
+  "n": 1,
+  "page": 100
+ },
+ {
+  "de": "Verbraucher",
+  "n": 1,
+  "page": 315
+ },
+ {
+  "de": "Verdrängungs",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "Verstelleinheit",
+  "n": 1,
+  "page": 246
+ },
+ {
+  "de": "Verstellmotor",
+  "n": 1,
+  "page": 281
+ },
+ {
+  "de": "Vierkantensteuerung",
+  "n": 1,
+  "page": 220
+ },
+ {
+  "de": "volumen",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "vorgabe",
+  "n": 1,
+  "page": 338
+ },
+ {
+  "de": "Vorsteuerkammer",
+  "n": 1,
+  "page": 65
+ },
+ {
+  "de": "Vorsteuerung",
+  "n": 1,
+  "page": 158
+ },
+ {
+  "de": "VQp",
+  "n": 1,
+  "page": 241
+ },
+ {
+  "de": "Wegsensor",
+  "n": 1,
+  "page": 58
+ },
+ {
+  "de": "welle",
+  "n": 1,
+  "page": 373
+ },
+ {
+  "de": "werden, Gleichungen ( 6.51) und ( 6.52). Damit ergeben sich",
+  "n": 1,
+  "page": 182
+ },
+ {
+  "de": "Wirkprinzip",
+  "n": 1,
+  "page": 128
+ },
+ {
+  "de": "Wirkungsgrad als Funktion von Lastkraft und Flächenverhältnis",
+  "n": 1,
+  "page": 215
+ },
+ {
+  "de": "Z min",
+  "n": 1,
+  "page": 258
+ },
+ {
+  "de": "Zeittakt",
+  "n": 1,
+  "page": 145
+ },
+ {
+  "de": "Zweikantensteuerung",
+  "n": 1,
+  "page": 220
+ },
+ {
+  "de": "Zweischleifige Regelung",
+  "n": 1,
+  "page": 342
+ },
+ {
+  "de": "Zylinder",
+  "n": 1,
+  "page": 283
+ },
+ {
+  "de": "Äußerer Regelkreis",
+  "n": 1,
+  "page": 394
+ },
+ {
+  "de": "Ölsteifigkeit",
+  "n": 1,
+  "page": 318
+ },
+ {
+  "de": "Über die mit der Schieberposition bis zum maximalen Hub ymax linear veränderlichen",
+  "n": 1,
+  "page": 189
+ },
+ {
+  "de": "Überdeckung durch Überlagerung der Halbbrücken mit Nullüberdeckung gewonnen",
+  "n": 1,
+  "page": 182
+ }
+]
