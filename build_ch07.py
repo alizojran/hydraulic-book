@@ -152,8 +152,94 @@ b.para("为比较训练了一个（全连接）神经网络（MLP）模型。模
        "模型评价（即模型的纯仿真）比较。仿真表明 ANN 模型的预测质量良好。")
 fig("7.10")
 
-# ---- (more sections appended in subsequent passes: 7.2 ...) ----
+b.h3("7.1.6　本节小结", "Section Summary")
+b.para("从本节给出的辨识结果看，所考虑的液压驱动可用所考虑的所有模型（即多项式模型、模糊"
+       "模型和 ANN 模型）恰当地建模。控制器仿真研究证明，带自适应设定点滤波器的模糊状态反馈"
+       "控制器产生比线性 PID 控制器、甚至比线性状态反馈控制器更优的结果；最佳控制性能由模糊"
+       "模型预测控制器实现，但后者在标准自动化平台的工业应用上仍远未可实现。")
+
+# ===== section 7.2 assets =====
+FIGPAGE.update({"7.11": 298, "7.12": 298, "7.13": 299, "7.15": 300, "7.16": 300,
+                "7.17": 301, "7.18": 302, "7.22": 305})
+MANUAL.update({"7.14": (299, 65, 398, 388, 553), "7.19": (303, 65, 443, 388, 573),
+               "7.20": (304, 65, 148, 388, 333), "7.21": (304, 65, 390, 388, 560)})
+FIGCAP.update({
+ "7.11": ("实验室试验台“柔性机器人”", "Laboratory test-bed 'flexible robot'", 9),
+ "7.12": ("驱动机器人的液压回路（Nissing, 2002）", "Hydraulic circuit actuating the robot (Nissing, 2002)", 12),
+ "7.13": ("液压差动缸", "Hydraulic differential cylinder", 9),
+ "7.14": ("测量与仿真的活塞位置阶跃响应之比较（比例位置控制器）", "Measured vs. simulated piston position step responses (proportional position controller)", 12),
+ "7.15": ("测量与仿真的速度阶跃响应之比较（位置 P 控制器下）", "Measured vs. simulated velocity step responses (under position P-controller)", 11),
+ "7.16": ("测量与仿真的活塞速度阶跃响应之比较（开环系统）", "Measured vs. simulated piston velocity step responses (open-loop system)", 12),
+ "7.17": ("仿真：活塞位置阶跃响应（线性比例 vs. 非线性控制器）", "Simulation: piston position step response (linear proportional vs. non-linear controller)", 12),
+ "7.18": ("仿真：活塞速度阶跃响应（非线性位置控制器）", "Simulation: piston velocity step response (non-linear position controller)", 11),
+ "7.19": ("小缸 HSS 基于输入-输出线性化的级联负载力控制简化算法", "Simplified algorithm of cascade load force control for HSSs with small cylinder", 12.5),
+ "7.20": ("活塞位置阶跃响应（比例线性 vs. 非线性控制器）", "Piston position step response (proportional linear vs. non-linear controller)", 12),
+ "7.21": ("活塞位置阶跃响应（图 7.20 的放大）", "Piston position step response (zoomed)", 12),
+ "7.22": ("非线性控制器的负载压力-力跟踪", "Load-pressure-force tracking for the non-linear controller", 12),
+})
+
+b.h2("7.2　小型差动缸的建模与控制", "Modelling and Control of a Small Differential Cylinder")
+b.para("第二个案例研究关于用于控制机器人臂的小型差动缸伺服系统（系统参数概览见附录 B.1）的"
+       "建模与控制。")
+b.h3("7.2.1　系统描述", "System Description")
+b.para("下面给出图 7.11 和 7.12 所示实验室试验台的实验结果。该试验台为现实的实验室规模实验"
+       "设计，配有用弹簧钢制造的连杆以实现显著的柔性。两/三个旋转关节在闭运动链内由小型静液"
+       "差动缸驱动，把驱动的平移变换为关节的转动。对下面的研究，缸被单独安装在一块板上，如"
+       "图 7.13 所示。")
+fig("7.11"); fig("7.12"); fig("7.13")
+b.h3("7.2.2　基于物理的模型", "Physically Based Model")
+b.para("为获得仿真和控制设计的模型，已在 MATLAB 中实现微分方程 4.181。为简单起见，忽略泄漏"
+       "流、流体质量和阀摩擦；并假设体积模量（初值用式 3.21 的参数）和腔容积在缸两侧相等。"
+       "使用了初始摩擦模型参数 σ=175 N·s/m、Fc0=120 N、Fs0=185 N、cs=0.0174 m/s。为使该模型"
+       "拟合真实系统，比较计算的与测量的位置阶跃响应。为避免误差积分，系统和模型由增益 "
+       "K=30 V/m 的简单比例控制器控制。图 7.14 给出参考位置从 0.05 到 0.15 m 变化的阶跃响应，"
+       "这里只见小偏差。图 7.15 给出对应于图 7.14 位置信号的活塞速度。")
+fig("7.14"); fig("7.15")
+b.para("这些曲线表明，在 0.25 s 后速度降到 0.05 m/s 以下之前，测量与估计信号良好对应。为获得"
+       "额外整定信息，使用开环系统对伺服阀输入从 0 到 100% 变化的活塞速度阶跃响应。由于压力"
+       "管路是软管，须调整体积模量函数（式 3.21）；一些摩擦力（见图 4.32）参数也须整定（即"
+       "适配测量）。结果示于图 7.16。")
+fig("7.16")
+b.h3("7.2.3　线性控制与非线性控制", "Linear vs. Non-linear Control")
+b.para("把基于输入-输出线性化的级联压差-力控制概念（见 6.5 和 6.6 节、图 6.25 和 6.26）应用于"
+       "差动缸。下面给出仿真和实验结果。")
+b.label("7.2.3.1　仿真结果")
+b.para("参考力发生器")
+eq("7.1")
+b.para("由位置偏差的比例反馈和两个前馈项（补偿（测量的）外力和摩擦力）组成。只考虑静摩擦和"
+       "库仑摩擦，忽略黏性摩擦。图 7.17 给出应用 P 控制器和级联非线性控制器所得闭环系统的位置"
+       "阶跃响应（参考从 0 到 0.15 m 阶跃）。由该图似乎用非线性控制器无法获得显著改善；然而，"
+       "看速度阶跃响应（从 0 到 0.65 m/s 再回到零，图 7.15 和 7.18），可清楚看出两控制器结果的"
+       "巨大差别——非线性控制器表现远好于线性控制器。", indent=False)
+fig("7.17"); fig("7.18")
+b.label("7.2.3.2　实验结果")
+b.para("与非线性控制器在仿真中的轻松应用相反，在真实系统上的实现更困难。由于缸小，其动态相对"
+       "快，时间常数与被忽略子系统（即阀和管道动态）的相差不远。事实上，由图 7.16 可推断空载缸"
+       "的固有频率约 100 Hz，处于应考虑伺服阀和管道动态的区域。计入式 3.82 和数值 E′≈"
+       "15×10⁶ N/m²、cv′≈10⁻⁷ m³/(s·√N)、V≈10⁻⁴ m³、ps，对所考虑的缸导出时间常数 Tp 的近似 "
+       "Tp < 10 ms（对 0 ≤ pL* ≤ 0.85），与实验结果（见 4.4.2.1 节的图）良好吻合。另一问题源于"
+       "该试验台所用 PC 的限制：无法实现小于 1 ms 的采样时间（需要 10–50 μs 区域的采样时间）。")
+b.para("为解决这些问题并把概念应用于试验台，把式 6.99（假设 KLi=0，E′A=E′B=:E′，VA=VB=V）和"
+       "式 6.129–6.130 的控制律写成如下形式（Bernzen and Riege, 1996）：")
+eq("7.2")
+b.para("压力动态补偿项 KFL 只含快速的压力相关部分，故假设为常数，即", indent=False)
+eq("7.3")
+b.para("速度补偿项 Kx2 可近似为", indent=False)
+eq("7.4")
+b.para("有了这些近似，得到大为简化、易于实现的控制律（对 u ≥ 0）", indent=False)
+eq("7.5")
+b.para("u < 0 情形的控制律由组合式 6.99、6.129 和 6.130 类似得到（小结见图 7.19）。最后，把"
+       "图 7.19 的控制律应用于现已重装回机器人的小型差动缸。图 7.20 和 7.21 给出用（线性）"
+       "P 控制器和级联（非线性）控制器所得的典型结果。非线性控制器实现了更好的控制性能"
+       "（更小的上升时间和更小的稳态位置误差）。", indent=False)
+fig("7.19"); fig("7.20"); fig("7.21")
+b.para("用线性概念的受控系统对柔性臂引起的扰动的反应非常敏感；见图 7.21。P 控制器应用可见"
+       "大于 1.2 mm 的位置误差，而非线性控制器实现小于 0.25 mm 的偏差。此外，图 7.22 表明非"
+       "线性控制器的负载压力-力跟踪工作良好，只在快速阶跃变化区附近见一些偏差。")
+fig("7.22")
+
+# ---- (more sections appended in subsequent passes: 7.3 ...) ----
 
 os.makedirs("parts", exist_ok=True)
 b.save("parts/ch07.docx")
-print("Saved parts/ch07.docx (WIP through 7.1)")
+print("Saved parts/ch07.docx (WIP through 7.2)")
