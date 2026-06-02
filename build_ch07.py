@@ -11,6 +11,16 @@ doc = fitz.open(SRC_PDF)
 EQ = {}
 for pp in PAGES:
     EQ.update(extract_equations(SRC_PDF, pidx(pp), CH, "ch7_eqs"))
+# OCR-invisible equation labels -> explicit bands (page, y0, y1), full content width
+def _band_eq(pg, y0, y1, label, dpi=200, pad=7):
+    page = doc[pidx(pg)]; ws = page.get_text("words")
+    L = min(w[0] for w in ws); R = max(w[2] for w in ws)
+    box = fitz.Rect(L-pad, y0, R+pad, y1)
+    path = os.path.join("ch7_eqs", f"eq_{label}.png"); page.get_pixmap(dpi=dpi, clip=box).save(path)
+    return (path, box.width/72*2.54)
+EXPLICIT_EQ = {"7.4": (303, 224, 256)}
+for _lab, (_pg, _y0, _y1) in EXPLICIT_EQ.items():
+    EQ[_lab] = _band_eq(_pg, _y0, _y1, _lab)
 
 # ---- figures ----
 os.makedirs("ch7_figs", exist_ok=True)
