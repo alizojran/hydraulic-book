@@ -60,11 +60,33 @@ MANUAL_EQ = {"5.16": (139, 72)}   # labels that did not OCR as tokens (page, y-c
 for lab, (pg, yc) in MANUAL_EQ.items():
     EQ[lab] = _ink_crop(doc[pidx(pg)], yc, lab)
 
+# explicit bands (page, y0, y1) for equations the ink-method can't isolate
+# (closely-stacked lists, or labels OCR'd as gibberish). Full content width.
+def _band(page, y0, y1, label, dpi=200, pad=7):
+    ws = page.get_text("words"); L = min(w[0] for w in ws); R = max(w[2] for w in ws)
+    box = fitz.Rect(L-pad, y0, R+pad, y1)
+    path = os.path.join("ch5_eqs", f"eq_{label}.png"); page.get_pixmap(dpi=dpi, clip=box).save(path)
+    return (path, box.width/72*2.54)
+EXPLICIT_EQ = {
+    "5.97": (164, 398, 423),
+    "5.98": (164, 486, 585), "5.99": (164, 486, 585),   # RBF list (i)-(iv) as one block
+    "5.100": (164, 486, 585), "5.101": (164, 486, 585),
+    "5.108": (167, 182, 201), "5.109": (167, 222, 241),
+    "5.110": (167, 422, 444), "5.111": (167, 464, 486), "5.112": (167, 564, 596),
+}
+for lab, (pg, y0, y1) in EXPLICIT_EQ.items():
+    EQ[lab] = _band(doc[pidx(pg)], y0, y1, lab)
+
 # ---- figures ----
 os.makedirs("ch5_figs", exist_ok=True)
-FIGPAGE = {"5.1": 127, "5.2": 129, "5.3": 132, "5.4": 133, "5.5": 134, "5.6": 147}
+FIGPAGE = {"5.1": 127, "5.2": 129, "5.3": 132, "5.4": 133, "5.5": 134, "5.6": 147,
+           "5.7": 153, "5.8": 155, "5.9": 157, "5.10": 158, "5.11": 158, "5.12": 158,
+           "5.13": 159, "5.14": 161, "5.15": 164, "5.16": 165, "5.17": 170,
+           "5.18": 171, "5.19": 171}
 MANUAL  = {"5.2": (129, 50, 72, 388, 583), "5.3": (132, 75, 172, 365, 335),
-           "5.5": (134, 75, 56, 365, 233), "5.6": (147, 48, 56, 393, 207)}
+           "5.5": (134, 75, 56, 365, 233), "5.6": (147, 48, 56, 393, 207),
+           "5.8": (155, 70, 228, 388, 336), "5.17": (170, 70, 400, 388, 535),
+           "5.18": (171, 105, 282, 330, 318)}
 TOPCUT  = {}
 def _figbox(page, fig):
     words = page.get_text("words")
@@ -96,6 +118,19 @@ FIGCAP = {
  "5.4": ("PRMS 示例", "An example of a PRMS", 11),
  "5.5": ("啁啾（chirp）信号", "A chirp signal", 11),
  "5.6": ("(a) 串-并联模型结构；(b) 并联模型结构", "(a) Serial-parallel model structures; (b) parallel model structures", 13),
+ "5.7": ("模糊系统的处理步骤：模糊化、推理与去模糊化", "Processing steps of a fuzzy system: fuzzification, inference and defuzzification", 13),
+ "5.8": ("动态模糊模型：外部记忆 n 个历史输出与 m 个历史输入并用作模糊规则的输入（Mamdani 与 Sugeno 型均适用）", "Dynamical fuzzy models via external memory of n output and m input history values", 12),
+ "5.9": ("1、2、3 维特征空间的网格型与多变量型隶属函数及划分", "Grid- and multivariate-type membership functions and partitioning for 1-, 2- or 3-D feature spaces", 12.5),
+ "5.10": ("Lp 范数在原点周围的等范数线（不同 p）", "Iso-normal lines around the origin for an Lp norm and different realisations of p", 12),
+ "5.11": ("内积范数在原点周围的等范数线（不同形式矩阵 D）", "Iso-normal lines for an inner product norm and different realisations of the form matrix D", 12),
+ "5.12": ("按式 5.76 的二维参数隶属函数示例（四原型，Mahalanobis 范数，v=1.5）", "Example of a membership function (Eq. 5.76) with a two-dimensional argument", 9.5),
+ "5.13": ("串-并联（左）与并联（右）模型评价", "Serial-parallel (left) and parallel model evaluation (right)", 11),
+ "5.14": ("SISO 模糊模型数学描述小结（输入-输出形式）", "Summarised mathematical SISO fuzzy model description (input-output form)", 13),
+ "5.15": ("(a) 神经元细节；(b) 单隐层多层感知器", "(a) Details of a neuron; (b) multi-layer perceptron with single hidden layer", 12.5),
+ "5.16": ("RBF 网络", "RBF network", 9),
+ "5.17": ("结合 DSVF 用正交 LS 方法辨识 SISO 非线性模型的方案（Jelali, 1997）", "Scheme for identifying SISO non-linear models using orthogonal LS with DSVFs (Jelali, 1997)", 12.5),
+ "5.18": ("级联全通滤波器（AF）与巴特沃思滤波器（BWF）", "Cascaded all-pass filter (AF) and Butterworth filter (BWF)", 9.5),
+ "5.19": ("状态变量滤波器的框图（Jelali, 1997）", "Block diagram of a state variable filter (Jelali, 1997)", 12.5),
 }
 
 # ---- build ----
@@ -573,8 +608,219 @@ eq("5.68", "5.69", "5.70", "5.71")
 b.para("所得 NOCF 和 NOBCF 将分别称为近似多项式 NOCF 和 NOBCF。可以证明，式 5.60 和 5.67 "
        "是式 5.51 的特殊形式。", indent=False)
 
-# ---- (more sections appended in subsequent passes: 5.4.2 fuzzy ...) ----
+b.h3("5.4.2　模糊模型", "Fuzzy Models")
+b.label("5.4.2.1　模糊建模导论（Introduction to Fuzzy Modelling）")
+b.para("Zadeh（1965）提出“模糊逻辑”概念，以提供一种数学上精确的理论来对不确定信息建模。所得"
+       "基本概念可解释为（例如）二值逻辑的推广，它引出了“模糊集”：经典集合中论域元素的隶属"
+       "被限制为二值的“是/否”或“1/0”判定，而对模糊集，它是连续数 μ ∈ [0; 1]。“隶属函数”"
+       "μA(x): ℝ → [0; 1] 把隶属度 μ 赋予其自变量 x 对模糊集 A 的隶属。")
+b.para("人类逻辑可解释为以非清晰因果关系的形式工作。为对其建模，Zadeh 引入“模糊规则”：其"
+       "前提（IF 部分）对规则的有效性或适用性分类，又给出一个（非清晰的）连续数 μ ∈ [0; 1]；"
+       "其结论（THEN 部分）可取不同形式，如下文所述。文献中已提出连续时间和离散时间的模糊"
+       "模型，本书只讨论后者。")
+b.para("通常区分两种不同的模糊系统类型。关系型（或“Mamdani”型）模糊系统（Tong, 1978）的"
+       "前提和结论都是语言性的：")
+eq("5.72")
+b.para("该规则可解释为：依据（模糊）输入 Z(k) 与其参考 Zp 有多接近、（模糊）输入 W(k) 与其参考 "
+       "Wh 有多接近，对参考输出 Yi 加权，以确定该规则在被评价规则集中的贡献；评价的结果是一个"
+       "模糊集。", indent=False)
+b.para("另一种类型——函数型（或“Takagi-Sugeno”型）模糊系统，与关系型系统不同，其结论使用"
+       "清晰函数（Takagi and Sugeno, 1983）：")
+eq("5.73")
+b.para("该规则可像关系规则那样解释，区别在于评价结果是一个清晰数（来自结论）加上适用度"
+       "（来自前提）。", indent=False)
+b.para("模糊系统（模型或控制器）由模糊化、推理和去模糊化模块组成（见图 5.7）。模糊化模块利用"
+       "为前提（输入）定义的参考隶属函数把清晰输入转换为模糊量；推理机对给定模糊输入评价所有"
+       "模糊规则；去模糊化模块把模糊结论转换回清晰数。Mamdani 型系统各给出一个模糊结论，而 "
+       "Sugeno 型系统的结论各给出一个清晰结论；因此 Mamdani 型系统的结论也有隶属函数，Sugeno "
+       "型则没有。事实上，Sugeno 型系统以简单加权平均导出全局结论，而 Mamdani 型系统有许多"
+       "方法。")
+fig("5.7")
+b.para("一般而言，模糊模型可通过以下途径获得（Harris and Moore, 1989）：")
+b.bullet("言语化（Verbalisation）。　由人类专家的知识获取来进行模型综合（仅适用于 Mamdani 型"
+         "系统）。")
+b.bullet("模糊化（Fuzzification）。　把清晰数学模型变换为模糊模型。")
+b.bullet("辨识（Identification）。　由系统的输入-输出数据导出（参数化）模糊模型。")
+b.para("模糊模型之所以有吸引力，原因包括其良好的逼近能力和应用的灵活性。事实上，已证明某些"
+       "类别是通用逼近器（如 Kosko, 1992；Buckley, 1993；Wang, 1994；Rovatti, 1998；Ying, "
+       "1998）。把人类操作员的启发式建模为（Mamdani 型）模糊控制器，使得无需过程建模即可对"
+       "抗拒常规自动控制的过程实现自动控制；这在 1970 年代后期推动了模糊控制的热潮，重点是"
+       "过程工业应用（那里建模常困难且昂贵）。")
+b.para("下面考虑过程建模、随后进行基于模型的控制器设计这一路径。本书采用 Sugeno 型建模方法。"
+       "Sugeno 型系统在非线性系统分析、辨识、建模与控制领域受到极大关注；这被认为是由于把形式"
+       "方法迁移到这些系统的一些新的关键结果，为用户提供了背后有成熟理论的工具箱，例如系统"
+       "稳定性、用 LMI 方法保证稳定性的控制器设计、作为并行补偿器并配以极点配置的控制器设计"
+       "等。一些近期专著用相当篇幅讨论 Sugeno 型系统（Babuška, 1998；Leenaerts and Bokhoven, "
+       "1998；Murray-Smith and Johansen, 1998；Nelles, 2001）。")
+b.para("离散时间模型将由辨识获得。Sugeno 型模型通常比 Mamdani 型模型给出更高的数值预测质量，"
+       "这在模型用于模型预测控制器内时是有利的（Kroll and Bernd, 2000）。此外，Sugeno 型模型"
+       "允许把线性控制系统工程的方法迁移到基于模糊模型的控制，例如以“并行分布补偿器”的形式"
+       "（Wang 等, 1995）。下文引入的扩展 Sugeno 型模型可理解为径向（及超）基函数网络的推广，"
+       "后者在 5.4.3.2 节描述（Kroll, 1996）。关于模糊辨识与建模的更深入学习，参阅 Kroll"
+       "（1997）和 Babuška（1998）。")
+b.label("5.4.2.2　模糊模型中动态的表示（Representation of Dynamics in Fuzzy Models）")
+b.para("每条模糊规则表示输入到输出的静态映射，因为规则没有记忆。动态行为通过外部记忆扩充"
+       "获得：后者把输入和输出最近的值存储到指定的有限时域，并把它们作为规则的输入。这称为"
+       "“外部递归模型”。图 5.8 为单输入单输出模型勾画了这种方法，并指出了死区时间 τ 以及模型"
+       "输入和输出的缩放因子 Su 和 Sy 的处理；归一化量以“*”标示。为可读性，下文不区分缩放与"
+       "未缩放的量。")
+fig("5.8")
+b.label("5.4.2.3　Sugeno 型模糊模型的数学描述（Mathematical Description of Sugeno-type Fuzzy Models）")
+b.para("前提（前件）：隶属函数、距离范数与模糊度。　Sugeno 型模糊模型由 c 条规则组成，每条"
+       "都有语言性前提和清晰结论：")
+eq("5.74")
+b.para("不使用前提中的多个标量表达式，而使用单个向量型表达式：", indent=False)
+eq("5.75")
+b.para("给定当前特征向量 z(k)，规则的满足度（清晰数 μ ∈ [0; 1]）通过把它与规则的参考 z̄ 比较"
+       "得到。事实上，使用多变量（多维）模糊集而非单变量（标量）模糊集，以克服本来被强加的"
+       "网格型划分。实际上，满足度通过评价与规则 i 相关的相应隶属函数 μi(k) 来计算。（若前提"
+       "由若干标量比较组成，每个比较 (…IS…) 有其相关隶属函数并单独评价，然后用 T-范数组合"
+       "结果以给出规则的总满足度。）图 5.9 阐明了网格型与多变量型隶属函数及由此产生的划分之间"
+       "的区别。")
+fig("5.9")
+b.para("一个有趣的多变量隶属函数源于（概率）模糊分类（Bezdek, 1981）：每个隶属函数 μi(z) 把其"
+       "自变量 z 到其指定参考点（向量）vi 的距离与到所有其他 c−1 个参考点的距离比较，以计算"
+       "隶属值；距离为零（“奇异”）单独处理。在数学上 μi(z) 可写为：")
+eq("5.76")
+b.para("该隶属函数也称为“概率性的”，因为对任意自变量，到 c 个划分的所有隶属之和为 1："
+       "Σᵢ μi(x) ≡ 1 ∀x。参数 v 调节 μi(z) 的模糊度：模糊度随 v 增大。对 1 < v < 3，该隶属函数"
+       "连续、非凸且连续可微（Kroll, 1997）。", indent=False)
+b.para("可能性（possibilistic）隶属函数是另一种多变量隶属函数。它们源于可能性模糊聚类"
+       "（Krishnapuram and Keller, 1993），多变量高斯隶属函数也属此类。可能性隶属函数连续、凸"
+       "且通常连续可微；与概率隶属函数不同，到 c 个划分的所有隶属之和对任意自变量并不为 1。"
+       "下文将使用概率隶属函数类型，因为它对辨识与建模有优势（连续可微、可把模式识别的方法"
+       "迁移到辨识）。注意，单变量可能性隶属函数可由多变量概率隶属函数导出，例如通过投影"
+       "（Babuška, 1998）。")
+b.para("隶属函数使用向量范数 ‖·‖v 来量化出现的距离。距离范数应根据数据中出现的结构来选择。"
+       "突出的范数有 Lp 范数（Hartung and Elpelt, 1992）：")
+eq("5.77")
+b.para("它产生从菱形到球形再到矩形的结构：p=1 时为 1-范数，p=2 时为欧几里得范数，p→∞ 时为"
+       "最大值范数；见图 5.10。另一个常用范数是内积范数 ‖x‖²D = xᵀDx，带形式矩阵 D（Bronstein "
+       "and Semendjajew, 1991），它生成椭球形等范数线；见图 5.11。", indent=False)
+fig("5.10"); fig("5.11")
+b.para("它包括（例如）D=I 时的欧几里得范数和 Mahalanobis 范数作为特例。Mahalanobis 范数由其"
+       "对称形式矩阵 D 定义")
+eq("5.78")
+b.para("带（协）方差", indent=False)
+eq("5.79")
+b.para("图 5.12 给出一个采用 Mahalanobis 范数评估距离的隶属函数示例。")
+fig("5.12")
+b.para("结论（后件）。　结论包含动态局部模型 fi。它们可为任意类型，不过下文把局部模型限制为带"
+       "附加偏置项的线性模型。偏置项通常允许显著改善预测质量（Kroll, 1997:75；Babuška, "
+       "1998:29）。局部模型为状态空间型或输入-输出型；后者的一个例子是如下模糊规则：")
+eq("5.80")
+b.para("其中 y 是系统输出，u 是系统输入，ξ 是常数，θ 是参数向量，i 是规则编号。另一个常见限制"
+       "（这里也假设）是：一个模型的所有结论具有相同结构。", indent=False)
+b.para("模型可用两种方式评价（另见 5.3.3 节及图 5.6）：串-并联，以及并联。串-并联评价时，由测量"
+       "输入和测量的历史输出值作预测；相反，并联评价时，存储的预测值用作历史输出值的模型输入"
+       "——后者也意味着错误的预测误差可能通过模型被放大。并联评价对长程预测（如 MPC 中）和"
+       "仿真应用很重要；另见 Henson 与 Seborg（1996）。图 5.13 勾画了这两种评价模式的区别"
+       "（另见图 5.6）。在数学上，对 SISO 模型，模型 j 的结论可写为：")
+eq("5.81")
+b.para("串-并联评价时，回归向量为", indent=False)
+eq("5.82")
+b.para("并联评价时，回归向量为", indent=False)
+eq("5.83")
+fig("5.13")
+b.para("两种情形下参数向量均为（偏置参数 ξ 单独保留）：")
+eq("5.84")
+b.para("推广到带 g 个输入 u1,…,ug 的 MISO 模型（串-并联评价）是直截了当的：", indent=False)
+eq("5.85")
+b.para("并联评价的推广相应进行。", indent=False)
+b.para("由局部模型集合成总体模型。　c 个局部预测（即 c 个模型/规则的输出）被模糊地叠加：每个"
+       "局部预测以其满足度 μi 加权，然后求和构成全局预测。对输入-输出型模型，得到：")
+eq("5.86")
+b.para("引入模糊基函数（Wang, 1994）", indent=False)
+eq("5.87")
+b.para("把书写简化为", indent=False)
+eq("5.88")
+b.para("注意，对概率隶属函数 μ̄i(k) ≡ μi(k) 成立。模糊模型的数学描述总结于图 5.14。", indent=False)
+fig("5.14")
+b.label("5.4.2.4　模糊输入-输出模型与状态空间模型（Fuzzy Input–output vs. State-space Models）")
+b.para("迄今考虑的是结论为输入-输出型的模糊模型，这种形式通常由辨识得到，典型用途包括仿真、"
+       "预报等预测应用，或作为输入-输出型模型预测控制器（MPC）内的预测模型。相反，若要利用"
+       "模型结构（如系统分析和控制器设计），则结论为状态空间型的模糊模型更有利。")
+b.para("输入-输出型的结论可变换为状态空间型。与线性理论一样，可生成许多等价的状态空间模型。"
+       "下面引入一个非最小实现，因为它的处理更透明。变换的困难在于处理每条规则的常数 ξ。如前"
+       "所述，考虑偏置项是因为它通常允许显著改善预测质量；它可显式处理（参数化方法）或作为"
+       "附加输入量处理（变量方法）。等价的状态空间模型可如下获得。c 个局部模型给出为：")
+eq("5.89")
+b.para("以矩阵-向量记号，或写为：", indent=False)
+eq("5.90", "5.91")
+b.para("c 个局部状态可合成全局状态，再用于预测输出信号：")
+eq("5.92")
+b.para("或者，c 个局部输出信号可合成全局输出预测：", indent=False)
+eq("5.93")
+b.para("状态空间表示将在 6.7.1 节用于发展模糊状态控制算法。", indent=False)
+b.h3("5.4.3　人工神经网络", "Artificial Neural Networks")
+b.para("人工神经网络（或简称神经网络）已在信号处理的许多领域广泛使用。一种特定的网络结构，"
+       "即前馈神经网络，因其出色的逼近性质（Cybenko, 1989；Funahashi, 1989）已被用于非线性"
+       "系统辨识（Chen 等, 1990a,b, 1992；Nørgaard 等, 2000）。在前馈网络中，神经元一般分组为"
+       "层；信号流经由单向连接从输入层经隐层流向输出层。神经元从一层连到下一层，但同一层内不"
+       "相连。前馈网络的突出例子包括多层感知器（MLP）网络（Rumelhart 等, 1986）和径向基函数"
+       "（RBF）网络（Poggio and Girosi, 1989；Chen 等, 1990a,b）。")
+b.para("关于神经网络从生物学背景到各种 ANN 架构、学习算法乃至硬件实现的广泛综述，可见 Zell"
+       "（1994）和 Haykin（1999）。ANN（尤其是 MLP 和 RBF 网络）用于模式识别与分类问题分析"
+       "的论述见 Bishop（1997）和 Ripley（1997）。关于神经-模糊建模与控制的专著由 Brown 与 "
+       "Harris（1994）撰写。一般而言，RBF 网络最适合低维和中维问题；由于估计 MLP 网络参数需要"
+       "复杂非线性优化算法（复杂而繁琐），MLP 通常更推荐用于高维问题。")
+b.label("5.4.3.1　多层感知器网络（Multi-layer Perceptron Networks）")
+b.para("神经网络一般由一组处理单元——神经元——组成，它们通过权（或突触）连接成特定架构。"
+       "神经元（或节点、单元）的基本模型示于图 5.15a。前一层的所有输出信号 yl−1,j 被加权、求和，"
+       "结果由激活函数 f(·) 处理给出该层的输出 yl,i：")
+eq("5.94")
+b.para("带权 wji。对单元施加一个偏置，由常数信号 yl−1,0 = 1 及其权 w0i 表示。", indent=False)
+fig("5.15")
+b.para("MLP 是最常见的神经网络架构类型，尽管它因通过非线性学习（估计）权收敛慢而存在问题。"
+       "图 5.15b 给出带一个隐层和一个输出层的 MLP 网络。输入（层）只充当把输入信号分配到第一"
+       "隐层的缓冲。激活函数的一个流行版本是 S 形（sigmoid）函数")
+eq("5.95")
+b.para("它给出平滑模型，优点是可使用基于梯度的参数估计方法。于是，表达带 sigmoid 隐单元和"
+       "线性输出单元的两层 MLP 网络中发生的情况的数学公式为", indent=False)
+eq("5.96")
+b.para("其中参数向量 θ 含网络所有可调参数，即权和偏置 {Wj,l, wj}；r 是输入单元数，h 是隐层中"
+       "神经元数。由式 5.96（与式 5.16 比较）可见，MLP 网络只是式 5.16 一般模型结构以 sigmoid "
+       "作为母基函数的特例（Ljung, 1999）。当然，MLP 网络也可使用任何其他激活函数，如双曲"
+       "正切函数 σ(x) = tanh(x)。", indent=False)
+b.label("5.4.3.2　径向基函数网络（Radial Basis Function Networks）")
+b.para("RBF 网络是特殊的前馈网络，它们是构建成一个能成功划分模式空间的函数的非线性函数。"
+       "图 5.16 勾画了 RBF 网络的架构。MLP 网络由作为非线性函数自变量的加权和定义的超平面"
+       "构建其分类，而 RBF 网络用超椭球来划分模式空间；这些由 Ψ(‖φ−vj‖) 形式的函数定义，其中"
+       "‖·‖ 表示某种距离度量（或范数）。网络的输出由下式求得：")
+eq("5.97")
+b.para("其中 vj 是中心向量，表示第 j 个基函数的位置；隐层通过权 λj 与输出层全连接。", indent=False)
+fig("5.16")
+b.para("函数 Ψ 通常（但非必须）为常见函数类型，典型地（Warwick 等, 1995b）：")
+eq("5.98", "5.99", "5.100", "5.101")
+b.para("其中 σ 是给定的标准差（高斯函数的宽度），a 是缩放或“宽度”参数。在可能的选择中，高斯"
+       "函数最直观因而被广泛使用。通常采用的范数是由下式支配的欧几里得距离：", indent=False)
+eq("5.102")
+b.para("然而，若偏好对每个输入使用不同宽度，则网络输出可描述为")
+eq("5.103")
+b.para("其中 σj,l 是对应于第 j 个隐单元和第 l 个输入的标准差。把式 5.97 和 5.103 与式 5.16 比较"
+       "可见，RBF 网络也只是以高斯函数（或任何其他函数形式）作为母基函数的一般模型结构的"
+       "特例。", indent=False)
+b.para("RBF 网络可理解为 5.4.2 节所述模糊模型的特例：每个基函数的权可理解为一个常值局部模型，"
+       "这是 Sugeno 型模糊模型动态局部模型的特例。模糊模型可用 RBF 作隶属函数（有时确实如此，"
+       "尽管更常用其他函数）。比较式 5.93 和 5.97 即可看出其相似性：RBF Ψj 对应于模糊基函数 "
+       "μ̄i，权 λj 对应于动态局部模型的预测 ŷi。")
+b.label("5.4.3.3　人工神经网络中动态的表示（Representation of Dynamics in ANN）")
+b.para("若现在把 φr 选为 n 个过去输出和 m 个过去输入（即 r = n+m），则得到动态 MLP 或 RBF 网络"
+       "——更确切地说是 NNARX（neural network ARX 的缩写）。类似地，5.3 节引入的所有回归向量"
+       "类型都可用来构造 NNFIR、NNARMAX、NNOE 和 NNSSIF 结构。")
+b.para("现在引入一种特殊但很有趣的、由两个神经网络（NN1: f[·] 和 NN2: g[·]）组成的模型结构"
+       "（Nørgaard 等, 2000）：")
+eq("5.104")
+b.para("或等价地", indent=False)
+eq("5.105")
+b.para("其状态向量定义为", indent=False)
+eq("5.106")
+b.para("这种模型结构的主要动机是：在用神经网络作反馈线性化的框架中，开发非线性控制器变得更"
+       "容易（见 6.5.1 节和 6.8.1 节）。除激活或基函数外，神经网络的模型结构还包括隐层数和每层"
+       "所含单元数；进一步细节见 5.9.1 节和 5.9.3 节。", indent=False)
+
+# ---- (more sections appended in subsequent passes: 5.5 ...) ----
 
 os.makedirs("parts", exist_ok=True)
 b.save("parts/ch05.docx")
-print("Saved parts/ch05.docx (WIP through 5.4.1)")
+print("Saved parts/ch05.docx (WIP through 5.4.3)")
