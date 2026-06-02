@@ -498,8 +498,83 @@ b.para("与式 5.12 的连续时间描述类似，MIMO 非线性动态系统的�
 eq("5.47")
 b.para("其中 v(k) 和 w(k) 是适当维数的零均值扰动和噪声向量。此情形下模型由函数 f 和 h 定义。", indent=False)
 
-# ---- (more sections appended in subsequent passes: 5.4 ...) ----
+b.para("与输入-输出模型类似，由该方程的状态空间模型描述的系统在选定模型结构后即可辨识。一个"
+       "著名的表示是 SSIF 模型，它在回归向量中涉及新息 e(k)，可描述为（Habtom, 1999）：")
+eq("5.48")
+b.para("利用近似 f̂ 和 ĥ 以及扩展卡尔曼滤波器方法（Ljung, 1999），可构造最优一步超前预测：", indent=False)
+eq("5.49")
+b.para("其中 L(k) 是卡尔曼滤波增益矩阵，它将显式地取决于时间、函数 f 和 h，以及扰动和噪声序列"
+       "的协方差矩阵。", indent=False)
+
+b.h2("5.4　若干非线性模型结构的描述", "Description of Selected Non-linear Model Structures")
+b.para("本节将更详细地论述若干非线性模型结构，它们是本书作者为液压伺服系统开发和/或成功"
+       "应用的。")
+b.h3("5.4.1　连续时间特殊（标准）模型", "Continuous-time Special (Canonical) Models")
+b.para("尽管连续时间动态系统可由非线性离散时间模型充分逼近、且已提出众多（离散时间）模型"
+       "结构，但通常不易把估计的参数与物理行为或系统的连续时间描述相联系。在连续时间系统中，"
+       "许多特性可直接与某些系统参数相关；而在离散时间形式中，这类关系常不那么明显。因此，"
+       "从采样数据记录辨识连续时间模型有时是可取的，以增强对系统行为的解释并辅助控制器设计。")
+b.label("5.4.1.1　参数线性的多项式模型（Linear-in-the-parameters Polynomial Models）")
+b.para("在下面的方法中，假设非线性模型是参数线性的微分方程，以便应用著名的最小二乘估计方法。"
+       "可能的模型分量（即回归量）可以是输入和输出信号及其相关高阶导数的线性和非线性——"
+       "通常是多项式——函数。结构辨识的任务便是在所有可能分量中选出显著的分量。")
+b.para("与离散时间辨识的 NARX 模型（式 5.44）类似，可用如下形式的连续时间非线性多项式"
+       "输入-输出模型")
+eq("5.50")
+b.para("或紧凑表示", indent=False)
+eq("5.51")
+b.para("作为连续时间系统辨识的基础。n 是系统动态的阶数，u⁽ⁱ⁾(t) 和 y⁽ʲ⁾(t) 分别是输入和输出"
+       "信号的高阶导数。φ[·]（l≥2）是 l 次（称为非线性度）的多项式非线性函数，可借助约化"
+       "Kronecker 积记号（见附录 C.1）定义如下（Jelali, 1997）：", indent=False)
+eq("5.52")
+b.para("其中向量", indent=False)
+eq("5.53")
+b.para("以及", indent=False)
+eq("5.54")
+b.para("换言之，φ[·] 涵盖输入、输出、相关高阶导数和高次幂，以及所有这些信号之间的交叉乘积，"
+       "即回归量。", indent=False)
+b.para("于是容易证明，式 5.51 可改写为（线性）回归形式")
+eq("5.55")
+b.para("其中", indent=False)
+eq("5.56")
+b.para("是回归向量，而", indent=False)
+eq("5.57")
+b.para("是参数向量。因此参数向量 θ 须由对象的输入-输出测量辨识，这可由基于最小二乘的估计"
+       "方法完成（见 5.5.2 节）。然而，通过重新表述问题使每个参数 θi 可用正交算法独立估计，可"
+       "获得可观的优势（见 5.5.3 节）。", indent=False)
+b.label("5.4.1.2　近似多项式连续时间标准形（Approximate Polynomial Continuous-time Canonical Forms）")
+b.para("下面给出的模型结构（由 Jelali 与 Schwarz（1995a-c）和 Jelali（1997）引入）能避免含大量"
+       "未知参数的复杂物理模型结构。已证明它们改进了线性逼近。此外，直接在这些标准结构中"
+       "辨识模型的优点是：可更容易地设计状态非线性观测器/滤波器和控制器（如 5.3.2 节已提及），"
+       "从而避免主要涉及线性或非线性偏微分方程积分的困难计算（Zeitz, 1990；Schwarz, 1991）。"
+       "而且，这类标准模型结构因参数数目最少而非常适合辨识——这是高度可取的性质。该性质的"
+       "结果是参数估计问题良态，因而参数估计的精度（以参数估计的方差度量）将很高。")
+b.para("观测器标准形（Observer Canonical Form）。　对非线性观测器标准形（NOCF）（Zeitz, "
+       "1990；Schwarz, 1991）")
+eq("5.58")
+b.para("使用近似", indent=False)
+eq("5.59")
+b.para("得到（Jelali, 1997）", indent=False)
+eq("5.60")
+b.para("其中", indent=False)
+eq("5.61", "5.62", "5.63")
+b.para("NOCF（式 5.58）的特征性质是：可像线性情形那样通过极点配置设计标准形观测器。", indent=False)
+b.para("能观性标准形（Observability Canonical Form）。　考虑由状态空间模型描述的非线性能观性"
+       "标准形（NOBCF）（Zeitz, 1990；Schwarz, 1991）")
+eq("5.64")
+b.para("则非线性函数 fn(x) 和 gn(x) 由多项式函数逼近", indent=False)
+eq("5.65")
+b.para("为减少模型参数数目，也可使用近似", indent=False)
+eq("5.66")
+b.para("来代替式 5.65。一些计算导出输入-输出关系（Jelali, 1997）", indent=False)
+eq("5.67")
+b.para("其中", indent=False)
+eq("5.68", "5.69", "5.70", "5.71")
+b.para("所得 NOCF 和 NOBCF 将分别称为近似多项式 NOCF 和 NOBCF。可以证明，式 5.60 和 5.67 "
+       "是式 5.51 的特殊形式。", indent=False)
+
+# ---- (more sections appended in subsequent passes: 5.4.2 fuzzy ...) ----
 
 os.makedirs("parts", exist_ok=True)
 b.save("parts/ch05.docx")
-print("Saved parts/ch05.docx (WIP through 5.3)")
+print("Saved parts/ch05.docx (WIP through 5.4.1)")
