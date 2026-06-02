@@ -16,7 +16,8 @@ PARTS = [
 ]
 # completed chapters merged into the delivered book (work-in-progress chapters
 # are intentionally excluded until finished, to avoid half-translated chapters)
-COMPLETE = ["build_ch03.py", "build_ch04.py", "build_ch05.py", "build_ch06.py"]
+COMPLETE = ["build_ch03.py", "build_ch04.py", "build_ch05.py", "build_ch06.py",
+            "build_ch07.py"]
 for s in COMPLETE:
     if os.path.exists(s):
         out = "parts/" + s.replace("build_", "").replace(".py", ".docx")
