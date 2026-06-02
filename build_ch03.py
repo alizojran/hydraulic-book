@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """第 3 章 液压物理基础 —— 内容构建（供 build_book.py 合并）。
 Produces parts/ch03.docx (content-only)."""
-import os, re, fitz
+import os, re, fitz, hashlib
 from hsbook_docx import DocBuilder, extract_equations, SRC_PDF, pidx
 
 # ----------------------------------------------------------------------------
@@ -66,8 +66,14 @@ FIGCAP = {
 # 3) build chapter content
 # ----------------------------------------------------------------------------
 b = DocBuilder()
+_lasteq = [None]
 def eq(*labels):
-    for L in labels: b.eq_image(EQ[L])
+    for L in labels:
+        entry = EQ[L]
+        hh = hashlib.md5(open(entry[0], "rb").read()).hexdigest()
+        if hh == _lasteq[0]:
+            continue
+        b.eq_image(entry); _lasteq[0] = hh
 def fig(num):
     cn, en, w = FIGCAP[num]; b.figure(f"ch3_figs/fig_{num}.png", num, cn, en, w)
 
