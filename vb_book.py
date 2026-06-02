@@ -17,6 +17,12 @@ os.makedirs("parts", exist_ok=True)
 PARTS = [
     ("vb_front.py", "parts/front.docx"),
     ("vb_ch1.py", "parts/ch01.docx"),
+    ("vb_ch2.py", "parts/ch02.docx"),
+    ("vb_ch3.py", "parts/ch03.docx"),
+    ("vb_ch4.py", "parts/ch04.docx"),
+    ("vb_ch5.py", "parts/ch05.docx"),
+    ("vb_ch6.py", "parts/ch06.docx"),
+    ("vb_ch7.py", "parts/ch07.docx"),
 ]
 
 for script, out in PARTS:

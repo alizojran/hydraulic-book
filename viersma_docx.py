@@ -89,6 +89,21 @@ def autocrop_figure(page_index, out_path, dpi=200, pad_frac=0.012,
 class BookBuilder(DocBuilder):
     """DocBuilder + image-rendered equations and scanned-figure embedding."""
 
+    def _add_math(self, p, markup, size=12, color=None, italic=False):
+        """Render inline math as a small baseline image (mathtext), so that
+        subscripts, dots and Greek/operator symbols display faithfully and
+        consistently with the display equations.  Overrides the base helper,
+        whose plain-run handling could not render LaTeX commands."""
+        fs = size or 12
+        colr = "black" if color is None else "#" + str(color)
+        path = os.path.join(EQ_DIR, "in_" + _slug(f"{markup}|{fs}|{colr}") + ".png")
+        if not os.path.exists(path):
+            render_eq(markup, path, fontsize=fs, color=colr)
+        w, _h = Image.open(path).size
+        run = p.add_run()
+        run.add_picture(path, width=Cm(min(w / EQ_DPI * 2.54, 15.5)))
+        return run
+
     def equation_img(self, latex, number=None, fontsize=13, max_cm=15.5):
         path = os.path.join(EQ_DIR, "eq_" + _slug(number or latex) + ".png")
         render_eq(latex, path, fontsize=fontsize)
@@ -115,13 +130,22 @@ class BookBuilder(DocBuilder):
         run.add_picture(path, width=Cm(min(w / EQ_DPI * 2.54, 15.0)))
         return run
 
-    def scan_figure(self, page_index, num, cn, en, max_cm=14.5, drop_caption=False):
-        """Auto-crop a scanned figure page and embed with bilingual caption."""
+    def scan_figure(self, page_index, num, cn, en, max_cm=14.5, drop_caption=False,
+                    rotate=0):
+        """Auto-crop a scanned figure page and embed with bilingual caption.
+
+        rotate (CCW degrees) turns landscape "survey" plates upright so they can
+        be reproduced at full content width.
+        """
         out = os.path.join(FIG_DIR, f"fig_{num.replace('.', '_')}.png")
         res = autocrop_figure(page_index, out, drop_caption=drop_caption)
         if not res:
             return None
         _path, width_cm = res
+        if rotate:
+            Image.open(out).rotate(rotate, expand=True).save(out)
+            w, _h = Image.open(out).size
+            width_cm = w / 200 * 2.54  # autocrop renders at dpi=200
         self.figure(out, num, cn, en, min(width_cm, max_cm))
 
     def scan_region(self, page_index, ytop, ybot, xleft, xright, width_cm=12,
@@ -140,3 +164,27 @@ class BookBuilder(DocBuilder):
         crop_region(SRC_PDF, page_index, y0, y1, x0, x1, out, dpi=dpi)
         w, _h = Image.open(out).size
         self.figure(out, num, cn, en, min(w / dpi * 2.54, max_cm))
+
+    def scan_eq(self, page_index, y0, y1, x0=0.07, x1=0.95, dpi=300,
+                max_cm=15.0):
+        """Crop a display-equation band [y0,y1]x[x0,x1] (page fractions) from the
+        scan, auto-trim surrounding whitespace, and embed it centred like an
+        equation.  Reproduces the original typeset maths verbatim — used where
+        equations are not re-typeset, guaranteeing fidelity."""
+        out = os.path.join(EQ_DIR, f"sc_p{page_index}_{int(round(y0*1000))}.png")
+        crop_region(SRC_PDF, page_index, y0, y1, x0, x1, out, dpi=dpi)
+        a = np.asarray(Image.open(out).convert("L"))
+        ink = a < 150
+        cols = np.where(ink.sum(axis=0) > 2)[0]
+        rows = np.where(ink.sum(axis=1) > 1)[0]
+        if len(cols) and len(rows):
+            pad = max(4, int(0.004 * a.shape[1]))
+            box = (max(0, cols[0] - pad), max(0, rows[0] - pad),
+                   min(a.shape[1], cols[-1] + pad), min(a.shape[0], rows[-1] + pad))
+            Image.open(out).crop(box).save(out)
+        w, _h = Image.open(out).size
+        width_cm = min(w / dpi * 2.54, max_cm)
+        p = self.doc.add_paragraph(); p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p.paragraph_format.space_before = Pt(5); p.paragraph_format.space_after = Pt(5)
+        p.add_run().add_picture(out, width=Cm(width_cm))
+        return p
