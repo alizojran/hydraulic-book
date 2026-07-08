@@ -506,7 +506,8 @@ def fig7():
     y = np.sin(2 * np.pi * f0 * (np.exp(t / 9 * np.log(f1 / f0)) - 1)
                * 9 / np.log(f1 / f0))
     ax.plot(t, y, color=C2, lw=1.2)
-    ax.set_title("(b) 扫频信号（chirp）——频率连续上升，测试快", fontsize=11)
+    ax.set_title("(b) 扫频信号（chirp）——频率连续上升，测试快【本讲选用】",
+                 fontsize=11)
     ax.set_ylim(-1.4, 1.5)
 
     # (c) multisine
@@ -579,6 +580,110 @@ def fig8():
     plt.close(fig)
 
 
+# ============================================================================
+# Fig 9 -- chirp-based FRF estimation: adequate vs. too-fast sweep
+# ============================================================================
+def sim_chirp(A, f0, f1, Tsw, dt=2e-4):
+    """Scalar RK4 simulation of the nonlinear closed-loop model driven by a
+    logarithmic chirp reference; returns (fs, xref array, x array)."""
+    import math
+    kk = math.log(f1 / f0) / Tsw
+    n = int(round(Tsw / dt))
+    x = v = pL = xv = xvd = 0.0
+    xr_a = np.empty(n)
+    x_a = np.empty(n)
+    c_be = 4 * be / Vt_mid
+    sqrt = math.sqrt
+
+    def deriv(t, x, v, pL, xv, xvd):
+        xref = A * math.sin(2 * math.pi * f0 * (math.exp(kk * t) - 1) / kk)
+        u = Kp * (xref - x)
+        u = 1.0 if u > 1.0 else (-1.0 if u < -1.0 else u)
+        xvdd = wv * wv * (u - xv) - 2 * Dv * wv * xvd
+        if xv > dz:
+            xve = (xv - dz) / (1 - dz)
+        elif xv < -dz:
+            xve = (xv + dz) / (1 - dz)
+        else:
+            xve = 0.0
+        arg = Ps - (pL if xve > 0 else -pL)
+        QL = Cv * xve * sqrt(arg if arg > 1e3 else 1e3)
+        pLd = c_be * (QL - Ap * v - Cl * pL)
+        vd = (Ap * pL - Df * v - Fc * math.tanh(v / vs)) / mt
+        return v, vd, pLd, xvd, xvdd
+
+    t = 0.0
+    for i in range(n):
+        k1 = deriv(t, x, v, pL, xv, xvd)
+        k2 = deriv(t + dt / 2, x + dt / 2 * k1[0], v + dt / 2 * k1[1],
+                   pL + dt / 2 * k1[2], xv + dt / 2 * k1[3],
+                   xvd + dt / 2 * k1[4])
+        k3 = deriv(t + dt / 2, x + dt / 2 * k2[0], v + dt / 2 * k2[1],
+                   pL + dt / 2 * k2[2], xv + dt / 2 * k2[3],
+                   xvd + dt / 2 * k2[4])
+        k4 = deriv(t + dt, x + dt * k3[0], v + dt * k3[1], pL + dt * k3[2],
+                   xv + dt * k3[3], xvd + dt * k3[4])
+        x += dt / 6 * (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0])
+        v += dt / 6 * (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1])
+        pL += dt / 6 * (k1[2] + 2 * k2[2] + 2 * k3[2] + k4[2])
+        pL = Ps if pL > Ps else (-Ps if pL < -Ps else pL)
+        xv += dt / 6 * (k1[3] + 2 * k2[3] + 2 * k3[3] + k4[3])
+        xvd += dt / 6 * (k1[4] + 2 * k2[4] + 2 * k3[4] + k4[4])
+        t += dt
+        xr_a[i] = A * math.sin(2 * math.pi * f0 * (math.exp(kk * t) - 1) / kk)
+        x_a[i] = x
+    return 1.0 / dt, xr_a, x_a
+
+
+def fig9():
+    from scipy import signal as sg
+    A, f0, f1 = 5e-3, 0.3, 40.0
+    runs = []
+    for Tsw, nper in ((60.0, 32768), (6.0, 8192)):
+        print(f"fig9: chirp sweep T = {Tsw:.0f} s ...")
+        fs, xr, xx = sim_chirp(A, f0, f1, Tsw)
+        fF, Pxy = sg.csd(xr, xx, fs=fs, nperseg=nper)
+        _, Pxx = sg.welch(xr, fs=fs, nperseg=nper)
+        sel = (fF >= f0) & (fF <= f1) & (Pxx > 1e-3 * Pxx.max())
+        runs.append((fF[sel], Pxy[sel] / Pxx[sel]))
+
+    # stepped-sine reference on the SAME nonlinear model (extra points near
+    # the resonance region)
+    print("fig9: stepped-sine reference ...")
+    f_ref = np.unique(np.concatenate(
+        [np.logspace(np.log10(0.3), np.log10(40), 12), [16., 19., 22., 25.]]))
+    G_ref = sim_closed_loop_frf(np.array([A]), f_ref)[:, 0]
+
+    f_lin = np.logspace(np.log10(f0), np.log10(f1), 400)
+    w = 2 * np.pi * f_lin
+    L = (Kp * Kv0 / (1j * w)) * pt2(w, wh, Dh) * pt2(w, wv, Dv)
+    Gcl = L / (1 + L)
+
+    fig, ax = plt.subplots(figsize=(10.5, 4.8))
+    ax.semilogx(f_lin, 20 * np.log10(np.abs(Gcl)), "k--", lw=1.4,
+                label="无摩擦线性模型（谐振峰偏高——实际摩擦提供了附加阻尼）")
+    ax.semilogx(f_ref, 20 * np.log10(np.abs(G_ref)), "o", color=C3, ms=7,
+                mfc="none", mew=1.8,
+                label="逐点定频正弦基准（同一非线性模型，±5 mm）")
+    ax.semilogx(runs[0][0], 20 * np.log10(np.abs(runs[0][1])), color=C1, lw=2,
+                label="扫频 60 s（扫速合适）：与定频基准吻合")
+    ax.semilogx(runs[1][0], 20 * np.log10(np.abs(runs[1][1])), color=C2, lw=2,
+                label="扫频 6 s（扫得太快）：谐振峰被抹平、偏低")
+    ax.annotate("谐振区扫速准则：df/dt ≤ (0.1~0.2)·Δf²，\n"
+                "Δf = 2·D·f$_h$（半功率带宽）→ 本例需 T ≥ 30~60 s",
+                xy=(20, -10.5), xytext=(0.55, -20),
+                arrowprops=dict(arrowstyle="->", color="#333333"),
+                fontsize=10, bbox=dict(fc="#fffbe8", ec="#c9b458", lw=1))
+    ax.set_xlabel("频率 [Hz]"); ax.set_ylabel("幅值 20·lg|x/x$_{ref}$| [dB]")
+    ax.set_ylim(-32, 6)
+    ax.legend(fontsize=10, loc="lower left")
+    ax.set_title("扫频（chirp）测试的关键：扫速必须足够慢（非线性模型仿真，"
+                 "±5 mm，H1 谱估计）", fontsize=12)
+    fig.tight_layout()
+    fig.savefig(f"{OUT}/fig9_chirp.png", dpi=190)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     fig1(); print("fig1 ok")
     fig2(); print("fig2 ok")
@@ -587,5 +692,6 @@ if __name__ == "__main__":
     fig5(); print("fig5 ok")
     fig7(); print("fig7 ok")
     fig8(); print("fig8 ok")
+    fig9(); print("fig9 ok")
     fig6(); print("fig6 ok")
     print("all figures ->", OUT)
